@@ -1,0 +1,896 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0B1020">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Jusqu'au 27 décembre">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230B1020'/%3E%3Cpath d='M16 26C6 19 4 12.5 9 9.5c3.4-2 6 .5 7 2 1-1.5 3.6-4 7-2 5 3 3 9.5-7 16.5z' fill='%23E3B25C'/%3E%3C/svg%3E">
+<title>Jusqu'au 27 décembre</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600&family=Karla:wght@400;500;700&family=Spectral:ital,wght@0,300;0,400;1,300&display=swap">
+<style>
+  :root {
+    --ground: #0B1020;
+    --ground-2: #0E1526;
+    --surface: #16203A;
+    --surface-2: #1B2745;
+    --line: #253253;
+    --line-soft: #1C2740;
+    --text: #E8E4DC;
+    --muted: #8D9AB8;
+    --muted-dim: #5D6883;
+    --brass: #E3B25C;
+    --brass-deep: #B98B37;
+    --brass-dim: #6E5528;
+    --rose: #D98A9A;
+    --display: "Fraunces", "Iowan Old Style", Georgia, serif;
+    --letter: "Spectral", "Palatino Linotype", Palatino, Georgia, serif;
+    --ui: "Karla", "Helvetica Neue", Arial, sans-serif;
+    --step-0: 0.9375rem;
+    --step-1: 1.0625rem;
+    --step-2: 1.375rem;
+    --step-3: 1.875rem;
+    --step-4: clamp(2.25rem, 7vw, 3.25rem);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--text);
+    font-family: var(--ui);
+    font-size: var(--step-1);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+
+  #ciel-fond {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .page {
+    position: relative;
+    z-index: 1;
+    max-width: 44rem;
+    margin: 0 auto;
+    padding: clamp(2.5rem, 8vw, 5rem) clamp(1.25rem, 5vw, 2rem) 5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 3.5rem;
+  }
+
+  /* ---------- En-tete ---------- */
+
+  .entete { display: flex; flex-direction: column; gap: 0.75rem; text-align: center; align-items: center; }
+
+  .surtitre {
+    font-family: var(--ui);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--brass-deep);
+  }
+
+  .titre {
+    font-family: var(--display);
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-size: var(--step-4);
+    line-height: 1.05;
+    margin: 0;
+    text-wrap: balance;
+    color: var(--text);
+  }
+  .titre em { font-style: italic; font-weight: 500; color: var(--brass); }
+
+  .sous-titre {
+    max-width: 30rem;
+    margin: 0;
+    color: var(--muted);
+    font-size: var(--step-0);
+    line-height: 1.65;
+    text-wrap: balance;
+  }
+
+  .compteur {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    padding: 0.4rem 0.9rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: rgba(22, 32, 58, 0.6);
+    font-size: 0.8125rem;
+    font-variant-numeric: tabular-nums;
+    color: var(--muted);
+  }
+  .compteur b { color: var(--brass); font-weight: 700; }
+
+  /* ---------- Calendrier ---------- */
+
+  .calendrier-bloc { display: flex; flex-direction: column; gap: 1.5rem; }
+
+  .mois-grille {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    gap: 2rem 2.5rem;
+  }
+
+  .mois { display: flex; flex-direction: column; gap: 0.75rem; }
+
+  .mois-titre {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 0;
+    font-family: var(--ui);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--brass-deep);
+  }
+  .mois-titre::after { content: ""; flex: 1; height: 1px; background: var(--line-soft); }
+
+  .grille { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; }
+
+  .jour-nom {
+    text-align: center;
+    font-size: 0.625rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--muted-dim);
+    padding-bottom: 0.25rem;
+  }
+
+  .case {
+    aspect-ratio: 1;
+    display: grid;
+    place-items: center;
+    border-radius: 3px;
+    font-family: var(--ui);
+    font-size: 0.75rem;
+    font-variant-numeric: tabular-nums;
+    border: 1px solid transparent;
+    background: transparent;
+    color: var(--muted-dim);
+    padding: 0;
+  }
+
+  .case.hors { color: #212B42; }
+
+  button.case { cursor: pointer; transition: transform 140ms ease, background 200ms ease, border-color 200ms ease; }
+  button.case:focus-visible { outline: 2px solid var(--brass); outline-offset: 2px; }
+
+  .case[data-etat="verrou"] { color: var(--muted-dim); border-color: var(--line-soft); }
+  .case[data-etat="dispo"] { color: var(--brass); border-color: var(--brass-dim); }
+  .case[data-etat="dispo"]:hover { background: rgba(227, 178, 92, 0.10); transform: scale(1.08); }
+  .case[data-etat="aujourdhui"] {
+    color: #14192B;
+    background: var(--brass);
+    border-color: var(--brass);
+    font-weight: 700;
+    box-shadow: 0 0 0 3px rgba(227, 178, 92, 0.16);
+  }
+  .case[data-etat="ouvert"] {
+    color: var(--brass);
+    border-color: var(--brass-dim);
+    background: rgba(227, 178, 92, 0.16);
+    font-weight: 500;
+  }
+  .case[data-etat="ouvert"]:hover, .case[data-etat="aujourdhui"]:hover { transform: scale(1.08); }
+  .case[aria-current="page"] { box-shadow: inset 0 0 0 1px var(--brass); }
+
+  .case.retrouvailles { border-color: var(--rose); color: var(--rose); position: relative; }
+  .case.retrouvailles[data-etat="ouvert"], .case.retrouvailles[data-etat="aujourdhui"] {
+    background: var(--rose); color: #14192B; border-color: var(--rose);
+  }
+  .case.retrouvailles::after {
+    content: "♥";
+    position: absolute;
+    top: -3px; right: -1px;
+    font-size: 0.5rem;
+    color: var(--rose);
+  }
+  .case.retrouvailles[data-etat="ouvert"]::after, .case.retrouvailles[data-etat="aujourdhui"]::after { color: var(--rose); }
+
+  .ciel-legende {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    justify-content: center;
+    font-size: 0.75rem;
+    color: var(--muted-dim);
+  }
+  .ciel-legende span { display: inline-flex; align-items: center; gap: 0.45rem; }
+  .puce { width: 11px; height: 11px; border-radius: 2px; flex: none; border: 1px solid transparent; }
+  .puce.ouvert { background: rgba(227, 178, 92, 0.16); border-color: var(--brass-dim); }
+  .puce.aujourdhui { background: var(--brass); }
+  .puce.dispo { border-color: var(--brass-dim); }
+  .puce.verrou { border-color: var(--line-soft); }
+  .puce.retrouvailles { border-color: var(--rose); }
+
+  /* ---------- Carte du jour ---------- */
+
+  .carte {
+    background: linear-gradient(180deg, var(--surface) 0%, var(--ground-2) 100%);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: clamp(1.5rem, 5vw, 2.5rem);
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    position: relative;
+  }
+
+  .carte-entete {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid var(--line-soft);
+  }
+
+  .jour-num {
+    font-family: var(--display);
+    font-weight: 300;
+    font-size: var(--step-3);
+    line-height: 1;
+    color: var(--text);
+    font-variant-numeric: tabular-nums;
+  }
+  .jour-num span { color: var(--muted-dim); font-size: 0.55em; }
+
+  .etiquette {
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--brass-deep);
+    border: 1px solid var(--brass-dim);
+    border-radius: 999px;
+    padding: 0.25rem 0.7rem;
+  }
+
+  .question {
+    font-family: var(--display);
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-size: var(--step-2);
+    line-height: 1.35;
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  .champ { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+
+  input[type="text"] {
+    flex: 1 1 12rem;
+    min-width: 0;
+    background: var(--ground);
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    color: var(--text);
+    font-family: var(--ui);
+    font-size: var(--step-1);
+    padding: 0.7rem 0.9rem;
+    transition: border-color 180ms ease;
+  }
+  input[type="text"]::placeholder { color: var(--muted-dim); }
+  input[type="text"]:focus { outline: none; border-color: var(--brass); }
+
+  .btn {
+    font-family: var(--ui);
+    font-size: 0.875rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.7rem 1.4rem;
+    border-radius: 3px;
+    border: 1px solid var(--brass);
+    background: var(--brass);
+    color: #14192B;
+    cursor: pointer;
+    transition: background 180ms ease, color 180ms ease;
+  }
+  .btn:hover { background: #F0C574; }
+  .btn:focus-visible { outline: 2px solid var(--brass); outline-offset: 3px; }
+
+  .btn-fantome {
+    background: transparent;
+    color: var(--muted);
+    border-color: var(--line);
+  }
+  .btn-fantome:hover { background: var(--surface-2); color: var(--text); }
+
+  .barre-bas { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+
+  .aide { font-size: 0.8125rem; color: var(--muted-dim); }
+
+  .indice {
+    font-size: 0.875rem;
+    color: var(--muted);
+    font-style: italic;
+    border-left: 2px solid var(--brass-dim);
+    padding-left: 0.9rem;
+    margin: 0;
+  }
+
+  .erreur { color: var(--rose); font-size: 0.875rem; margin: 0; }
+
+  .secousse { animation: secousse 380ms ease; }
+  @keyframes secousse {
+    10%, 90% { transform: translateX(-2px); }
+    20%, 80% { transform: translateX(3px); }
+    30%, 50%, 70% { transform: translateX(-5px); }
+    40%, 60% { transform: translateX(5px); }
+  }
+
+  /* ---------- La lettre ---------- */
+
+  .lettre { display: flex; flex-direction: column; gap: 1.5rem; }
+
+  .sceau {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--brass);
+  }
+  .sceau::after { content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, var(--brass-dim), transparent); }
+  .sceau i { font-style: normal; color: var(--rose); font-size: 1rem; letter-spacing: 0; }
+
+  .mot {
+    font-family: var(--letter);
+    font-weight: 300;
+    font-size: 1.25rem;
+    line-height: 1.75;
+    margin: 0;
+    color: #F2EEE6;
+    max-width: 34rem;
+  }
+
+  .signature {
+    font-family: var(--display);
+    font-style: italic;
+    font-weight: 300;
+    font-size: 1.125rem;
+    color: var(--brass);
+    margin: 0;
+    align-self: flex-end;
+  }
+
+  .apparait { animation: apparait 800ms cubic-bezier(0.2, 0.7, 0.3, 1) both; }
+  .apparait-2 { animation: apparait 800ms cubic-bezier(0.2, 0.7, 0.3, 1) 140ms both; }
+  .apparait-3 { animation: apparait 800ms cubic-bezier(0.2, 0.7, 0.3, 1) 320ms both; }
+  @keyframes apparait {
+    from { opacity: 0; transform: translateY(10px); filter: blur(3px); }
+    to   { opacity: 1; transform: none; filter: none; }
+  }
+
+  /* ---------- Etats speciaux ---------- */
+
+  .vide {
+    text-align: center;
+    color: var(--muted);
+    font-family: var(--letter);
+    font-size: 1.125rem;
+    line-height: 1.7;
+    margin: 0;
+  }
+
+  .pied {
+    text-align: center;
+    font-size: 0.75rem;
+    color: var(--muted-dim);
+    letter-spacing: 0.04em;
+  }
+
+  .retour {
+    background: none;
+    border: none;
+    color: var(--brass-deep);
+    font-family: var(--ui);
+    font-size: 0.8125rem;
+    cursor: pointer;
+    padding: 0;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .retour:hover { color: var(--brass); }
+  .retour:focus-visible { outline: 2px solid var(--brass); outline-offset: 3px; }
+
+  @media (max-width: 30rem) {
+    .grille { gap: 0.4rem; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+    }
+  }
+</style>
+</head>
+<body>
+<canvas id="ciel-fond" aria-hidden="true"></canvas>
+
+<main class="page">
+  <header class="entete">
+    <p class="surtitre" id="surtitre"></p>
+    <h1 class="titre" id="titre-page"></h1>
+    <p class="sous-titre">Une question par jour. Une bonne reponse, et le mot du jour s ouvre. Tu peux relire les anciens quand tu veux.</p>
+    <p class="compteur" id="compteur"></p>
+  </header>
+
+  <section class="calendrier-bloc" aria-label="Le calendrier">
+    <div class="mois-grille" id="calendrier"></div>
+    <div class="ciel-legende">
+      <span><i class="puce aujourdhui"></i> aujourd hui</span>
+      <span><i class="puce ouvert"></i> deja ouvert</span>
+      <span><i class="puce dispo"></i> a ouvrir</span>
+      <span><i class="puce verrou"></i> a venir</span>
+      <span><i class="puce retrouvailles"></i> retrouvailles</span>
+    </div>
+  </section>
+
+  <section id="carte-zone" aria-live="polite"></section>
+
+  <p class="pied" id="pied"></p>
+</main>
+
+<script>
+(function () {
+  "use strict";
+
+  var DATA = {"prenom":"Emma","debut":"2026-08-22","total":128,"signature":"T.","jours":[{"jour":1,"theme":"nous","question":"Combien de mois avant qu on se retrouve ?","indice":"Le compte a rebours demarre aujourd hui.","c":"BZMatUjBAg3bA7XUFdQwcpIKoazb2IfAEoJDCGZUdypCLFZiW7hG+25mcpcnlwHwbF+ffc15Usi1X456Q6g0CuhLtxckbdUHhWAA22yDyrv7iiieGFw8JG+973uUxbU+IeVvrOzdXaHCqHzJfZS7ftaE4ACWEfzNGFHfPrXI+0mONaKU9LzMdHDiI2+fITlFpJJoyFHTjcdSSodBqih8MlQB/K2jmoaKkGSYxdwpOFIuKKFUpJFlqMw+6ufttWIQF7Um3T85SAo88r7MqtsVm2a+iyT41mNyyzndgyvo5UUh","k":["xAq9Z3PO7HXoYf/IaSmlhtp4UWxig2OdQuw4smziupo=","DZrt95Yub3UvQQJIPVLE2fVOUe3ERFQTB7AYzwWblow="]},{"jour":2,"theme":"maths","question":"Combien font 12 x 12 ?","indice":"Une grosse douzaine.","c":"XuFMMIv3+t2RFhKP8qh8bqEcBqT7QC73zu33Rno70qCy3H1TQW7JPE5bMJRZXroqvvdNP/Mnf1arODzjOc3G65OgQMDzL1yHSAsPyCuQ+Mlwqcz5E90r4leeTSvWrllG12qXpqnMUJ46mXw8abLT9Ya4beUdicjz05I2XRcamg+yC8HSLf+79+f2oS+iROvRu85i4/s3Ww==","k":["r5Zx6Of1WPNZMo5qSOOho8NFn26riVwqlQjJQtz3P6c="]},{"jour":3,"theme":"enigme","question":"Plus on m en enleve, plus je deviens grand. Qui suis-je ?","indice":"On le creuse.","c":"omczOOU+85OQEzg8ufyb5GanPuY9vwq9Q2YXep5qpGvUDN4WraGsXsJ21EYfBK9NcuMKmU5a32z2fOCpXMty0ePmnrraIDNLrTh7wge1wZE/21ObvA/vG0Y4fH1rGISEP5+gNiyVGx9mZo+WnqzZM2AcIVavCM8cJa0=","k":["ETJVm/JlrtBdfaoAIwSMJCyhLKRg6yfU/y5b1lJRZok=","+DdZJFsctvFWwhaMnjFgspS0oXD5i4MwA0FD+c+OKxk=","7soeFGZdF7IhhHzei8p2RxTxryINgf4k/O0VE4TO++4="]},{"jour":4,"theme":"logique","question":"Quelle est la suite : 2, 4, 8, 16, ... ?","indice":"Chaque nombre double.","c":"niGpRQfPeSA/6q/Ttd5SZJtAkxALKh1KthI7rLPh4fnX5+QkHanY947+SBoyYGAwaMoxx958FStBd9elVY5MPU8/svbAPmX7vxbmKOjUaxTd9kTWpgg0ESgE1Fbh/4c04dVBPFGgpO3gXQafIV+zSFWRtb/+Kbd7tTPRZa8is9zDegW8TXF/0i8=","k":["Ps4rJ/bMaSRnBPNSR6c33l7RqEf2v3ITCbyTPaJGaiQ="]},{"jour":5,"theme":"culture","question":"Quelle est la capitale de l Italie ?","indice":"Tous les chemins y menent.","c":"tpyoWjwgglok1Nh/Q69oOGggm29e+v6h3PKhR1h+sr/C5n9+XPpAbyVY85T/B0OTV4e010Ww4ylOzP9YlP4j5HOGyqEeY/i7Gp1whYUIM2lqRY/pprEVrE5h3M2MfxkrUGtV7Eu67rtoHbktv9FBEWPcX8ZLPy/891E7IQ==","k":["RX1mevbK6u7dcYhkZtb0u3RWcPaUcruasI4bub0JgiE="]},{"jour":6,"theme":"maths","question":"Un pull coute 80 euros. Il est solde a 25 pourcent. Combien coute-t-il ?","indice":"Enleve un quart.","c":"XO/fIVkhcP78dPnJ08FzioWXMXudpx0DoZOImKv55qoDnvXV2LEXvenoy7BGzs3W54voJqiP1hUfmgujTnVWm7GVeZLnNqzOAjKzf3ZqIiu+WmKNaYbbtCB2BM0h/GDnF4aLcxKWXdVZpX4dy3mKGVVMSPv4aO7/W6aXz9qpmbdhgIWpRxcncSSLnJL1SbG//IiglSecazlYtOZxX6nPar4=","k":["L6oJLPuawWIYrcPW/jfwKwjUbE0wdQS3v5ZCmUgiifM=","Gaj641N6NCm48aQ2ZSKod0Vcpq5suPgUR/zageGdF3w="]},{"jour":7,"theme":"nous","question":"Combien de jours durera ce petit rituel, du 22 aout au 27 decembre ?","indice":"Quatre mois et cinq jours.","c":"QMjnJCY/egE7pcc46Ofi7rtWBfSpy7jHjdCxoG3Ax6o0XfKbc3WQabN+hz7GobCGyB8s4KnNZnk/EZjDV8EZlH0RUzdfCdy252JkUj4sCsU6kdsdAoKG/iiM7hNCijtC74OBhKsLdImCiCSSYQN4eRGSPij8Y3tsC5FL2oZB8rgv0bkRO+zCP70=","k":["xBFWHoaP4wKLgKHscG4zOrKw192uK2kmB7AxompEiR0=","NBkT6dHcHosXQv7NeeUOjZyzO07KxZVy1Ys8xDnJoKk="]},{"jour":8,"theme":"logique","question":"Un livre coute 10 euros plus la moitie de son prix. Combien coute-t-il ?","indice":"Ce n est pas 15.","c":"FCDzn/62uz9UIpVH9xlm/dUhJUNGCKEke81hsKIKqCASbozcEabO5BwQF8rU8M4j2FvrcN7XwCIIjsPgoq5pG4JHODOs0ZH5vZGJwKf6m2bupNr2US+suZxJA3Z0ckMBpmjz1k/tZqSaIW/qsab+Hd0lGdGhpcYO3Nr2UmA=","k":["Dp4EQPvZiI9/3KWqV3s9ucBeADryW8njlXYtOlqz1kc=","BxxeLR+05DP5/X54pl0LnAJeRSIWB9b5akf903nH+ZI="]},{"jour":9,"theme":"culture","question":"Combien de cotes a un hexagone ?","indice":"Comme le surnom de la France.","c":"CKvF9r5vQjGequnrkPn/wZAkpFdyQQT0hqFSHW6fumMsvZU+pOvJPYndHyWRYeyBndxaryH4MqdTvYfwB9PLMc2lp9mCKUelR+Y7LH5Vu97y/2V4U9vcLn5MLtWON2iREWLg5rVu2krzTQD/4u6jmS1aNJA1bTIyLdPIP29H+w==","k":["zcbvgpXJqPbxgbm55eztzGjsx/RWdJDIxIrQSw9VIHM=","3aCuaE2oqCsd9RbX+GWE/Cw1xz7RZO8GG7ebarTcl5g="]},{"jour":10,"theme":"maths","question":"Quelle est la racine carree de 169 ?","indice":"Entre 12 et 14.","c":"CdBUsTkus8Urkc9VGBVC9/HypTZSB70K3jpIRjcL8aHTw78vQ2bvMxbGqEGRNSUVdbfVmptLYMWaFtpuox6e587w48uegGL5EbVfwMuWSKWG5z6I9bjacjVIN+I+L72kkGgF1qa5/TymNf1Ea9ImXITMfYj1RGe1EmdPm/tWUG+LZg==","k":["bjJva0Tkab96U0BR8skko7AFbUT3ZKv08MfYRi1n494=","0IZRhx3KsUd2eyjejf/s/0J6ALGj2dPhQMh64MoKzPc="]},{"jour":11,"theme":"enigme","question":"Je parle sans bouche et j entends sans oreilles. Qui suis-je ?","indice":"On me trouve dans les montagnes.","c":"wcc8kKYP9dGEhUpynq6lGC0Br585j/oZmBlxEWdalpLdD2zJ6VJHxKkXcL17fSIgughoMaYMOa96Cl4KNewcBgHRtv8r1lcA8TNtrAVIGS6JKaEKbgmnomqliyIqoT0wgz9qBCJTq25MQ/LyIyDMSOU9mkCTbag=","k":["gJWnVE1nf9HfbH6jCvAJxk9W/F24GgajKudf06va768=","8VT9aJNMws+sTlZAqsjy6zJJbkbSJMHphB4/xikH384=","VlGu6b95Jh65/7kMqb17B3CAWotEEJkv3IgOUjdF8Sg="]},{"jour":12,"theme":"logique","question":"Quelle est la suite : 1, 1, 2, 3, 5, 8, ... ?","indice":"Chaque nombre est la somme des deux precedents.","c":"BLZJrsnVLE8DfQh1sZZfu7j+HAGgCAkpMskLv303CeHrUftZ8rPZJYFVM5BG3BVkQ8XpBopis43YI3uy1kFwm+uE3kR0e5v8eY0jboUM5WktJ82stgXfx1Pue4aKE0CCs0yuNQ==","k":["Iweet5DO1vIb0PITEiff2LMMBZA5alHOiWWeYz9z1Po=","nbOgW8ngDgoX+JqcbREXhEFzaGVt1ynbOWo8xdge+9M="]},{"jour":13,"theme":"maths","question":"Combien font 15 pourcent de 200 ?","indice":"10 pourcent puis la moitie en plus.","c":"doMlQPppqT7hmF5/Uds4No1leqFvZUd6EBmlUdyz27/1zs/GxkJyUTSQW0IlBa7zhWlaz5lRarm07XBdzP7YvgO1ssPsLIxi85JoQAd2+GgdEYcc2zKZxIL/RmzxjeypuGOypRYvwTie/3jz7zmpRFkTuaW2lk5gMIzaxVWIIQ0vJVISaVXoHjU=","k":["Qqli5gLnrpQ8Pndk89JyPDDJbdsuscQAVa/i7qGfTyI="]},{"jour":14,"theme":"nous","question":"Combien de semaines font 14 jours ?","indice":"Une quinzaine, presque.","c":"1l67qlIyzgJ0uY2guXEUWYZJ6oMuDdXU2O9Qg+DeGWmQxWb/ySBEAz/SDLIfZF43Wh/P07ktzpJ4dBUidh+//uu2rEit/EX/d1z4uLelSr/GS19mMVS/arWbstDIGYNrZkQc1A==","k":["0816ljeivzKH72eoqUJYeDr5V3l+/BHEHalDx8V1+9g=","Wkyb1V5kcQ3eSB1/Gy+xoV/phFA9Z4/3SsLZa83++BM="]},{"jour":15,"theme":"culture","question":"Quelle planete est surnommee la planete rouge ?","indice":"Elle donne son nom a un mois.","c":"4Brrf5X+fL0+Itssi3BgrhJyztpKqVL6xZ+7xan+EJyrOA6PHBJJ3gAsLyVT7zYFwKBvewYH7PiUaDvdewR3Q2GMWMBb15BdRaHL03g5/uuc6iadZqXXIT7phJfCjDeU+K0+8q/aCfZkK1sSypjNhSbhkqW1gDcCdlCN2F+rGRBBpEMDv6Aa/bKb6UHMQEG/0kpNe44=","k":["wTHSQsd1MuniEK1AWgfC/J2QzC2BlynGNS/vbKTsZQI=","tCBlmb5vVHelICfMoPXokQnXqcvHPj2gzrizBNs7rKc="]},{"jour":16,"theme":"maths","question":"Combien font 17 plus 26 ?","indice":"Presque la moitie de 90.","c":"ZZ60fdhU9BYgfFiv+lCJq/7CJpjklxv6w8StN2eh7rSSRllubyPRqSBJtMzecDlQMDZsHdTdXMPsLhpvD2yPbhkpRK0iZBHlrb6U/JKuyxIeH7ov66DaHHzkn4UH8JWHhGnO9FhgZJDMNRkg8NaoBWrWshKyBytRCkmFcgpjGd3LrG6wV9o=","k":["AgOwMs5FycX5Rv/4Oi5IcZZaN1k/uOp2R8v5IXE5soc="]},{"jour":17,"theme":"maths","question":"Un train roule a 90 km h. Combien de km parcourt-il en 40 minutes ?","indice":"40 minutes, c est deux tiers d heure.","c":"4zGNJBIz3iHTCK1ST9bwb1JHAHHTFfSsrGznW1JhiPNW3OMy/GjZVO9WKjdVez6xSE9lruZpUcQn5dfTW2cbPmJ1hGgHsOyyyQez4HqGq0TG+i6urMiWI8cfmecPuMtIT/TB52I5TjbHqvNgE5J28SZBBh6ksi4yHj0SJHC2","k":["6gC+yLRYStUlpa+LRTjp5N+K4sODD4ZWNSO7Bd8C4+U=","7+98JKVi0G+t+0n2BCl/leYFJFl/4HboF6+JSBPMRto="]},{"jour":18,"theme":"logique","question":"Si tous les chats sont des animaux et que Felix est un chat, Felix est-il un animal ? Oui ou non.","indice":"Reflechis moins que tu ne crois.","c":"3yfViLtN3CDSulohO+UMxJIsuhnpZoIuOJ6F9dpNvah0pKLxtWdi8h6gbzk9WA1pnNEOVm1iYrIkXqqBTMrrlHnMLntjAadjnTSKgjEQJIg/3YrQCdcrH5V+aGVCSI+rbDaW","k":["iCtS1sSpOwjTa7GqU2kIakAFiodcyEtaZP+KVfva02U="]},{"jour":19,"theme":"enigme","question":"Qu est-ce qui se casse quand on le dit ?","indice":"Il regne dans une bibliotheque.","c":"CGf2MWiQOSIlFwVsJ6TYbyvXNRNFnpjprnm4Mw1NoQvwd7HLslZoztwREURJreGTraatF4B3SMoIvK+nXyRQrxzEK7GykVMmqd5chcBkQQC6tDQ=","k":["WITSOKTQXkOwglnQxOKZjQ814ZE8bunADgkTMYLqGms=","bZwK6HM1Sy8WCEb27nPYUjE1hZt8E2G/xfmwfgNgtfI=","RVVyGXiOw7phdf1EAHVBx5NGO+rj4y1vEJl9Mvvn7QA="]},{"jour":20,"theme":"maths","question":"Combien font 7 x 8 ?","indice":"La table qui pose probleme a tout le monde.","c":"A5N9pBBLBC7YGEoK+YRWyzSWT+JSS7/utxCOPyDg+PStEuwDq/i6YRsi+UMk8O/lU8SH1bZNrn3jyfHv2RX0ByVA6uJuFvr7xdXlal7s4NXClwTue1FLH5mr+olEfIN3VbyhOo6/ZqhkO45rZ0TAcbf0Vg==","k":["QXNbUSGNEA4AZkaW7OHpFZNPz1vNGww0Zx3MsG7psDs="]},{"jour":21,"theme":"nous","question":"Combien de mots te restera-t-il apres celui-ci ? (128 au total)","indice":"Une soustraction toute simple.","c":"/IahFuPHsWV1zlURZHYr+kA4Q5B2WuiLrvhVYflxSuvTTykPH1uNCS+l92k87jexqlLgYXWBsM+RSiKO5At6cQNDPniFvTGIWcDv68wsElAuz3g4yC4l","k":["jY1xFXnUvudCMlO0DLaqZ3FfvN+CJHWDnakUAnQytVo=","IkfbDy/NfwGzzP71mizhxXZ48l8D9r9NVp/rCbeEym4="]},{"jour":22,"theme":"culture","question":"Combien de touches a un piano standard ?","indice":"Entre 80 et 90.","c":"Ms+CGNnXSK/BftQH+rYw/fk/mnebHPp2OyNVSxziduDZOP187KCKN7C1UQuWmZ+2P0m5vJwhCsoSdb1S5x5EMVMb0aOyV1vDyAQq06kMFHG3o1keJmT9eqaQ78jQl8yv5oY55C7C0hMlZiuSfstCY0/lw+7jOraoA1HEsPgtldRL1yB3","k":["1fnHX2GR5vHomZ7P2lUaI8AlQ5EWOWkWdE84TasnTSY="]},{"jour":23,"theme":"logique","question":"Combien de fois peut-on soustraire 5 de 25 ?","indice":"Apres la premiere fois, ce n est plus 25.","c":"k56YF7imqg7Vf960eBSRzTwUD1UjVDKxHwmroJLW0q445zfDitjw//fgH0YitusXK5f7rjJZq0g4wgYO3Fi0EErYN7Jbu3uYWXIhMpcEY/N+4NF/9NUBUXKTlcs2hUM/k02tDKlckeCxuJ5vyeJDKNZjWkdacZvJ","k":["4OdNX73iX2LLJtiNmuu0cFgbsPXt4lLEOKt97oRz4OM=","HId+CwjhppG361v1oLfUc2fRDB7evTlrbfopCXwKwj4=","d3BU7qMhRhNw1zm6MqcwbEXdpRfW4Hu8iGcHYZqYpLo="]},{"jour":24,"theme":"maths","question":"Quel est le perimetre d un carre de 7 cm de cote ?","indice":"Quatre cotes egaux.","c":"YrlzTGqLA1AsGZ5kXhDwr5+QIR6XjBv/7Ootzak+YFKcMoTP0WrIIwi0WLHHVMnM9N4G3PgSCkqm2c2O71pC8EpXPjVGwl4uG0G9gVtTdxIsH4IX0lX3ntweNUQaFflMQX8areoR2GAXO5b1VwyOKHYXuQa1iQg2iw==","k":["K5mnYAjObknWAE8yO2xBnEwtssxCPYzNM+RilTtJ71c=","3nuDClgGU/oPJZaaLNcNXoYolsgEn0MxA/+/KrvczBg="]},{"jour":25,"theme":"enigme","question":"Je suis pris avant d etre donne. Qui suis-je ?","indice":"On me prend avec un appareil.","c":"+FMQxrTWct/uR+kPN/1eFOciDXZyMcXTb+79zAlxG5rTOgzWWZhdo0DArAAKxFxvGDrdoOXEIrcvlaFVklBxSykUTR/QLdBtNI4xSNPihD0fQabpUn3AVkV86YzmceMO3eoMcPxPUN6kRXt5hEIhFUHjbmE=","k":["0jVpPzb8avhbG3usAwUvdyDD+qiEfZp6S6h6Uug4ydQ=","ZjBAEL5SZWPZBLjzmL+M5KEVczEOnGTsDEd3/1Ma9g4=","urnqoouwJTJMLg7eiHWliMraBVSfB0MnWrk8Wb8laR4="]},{"jour":26,"theme":"culture","question":"Quel est l ocean le plus grand du monde ?","indice":"Son nom evoque le calme.","c":"WHuJtHbBb1yVXY0x8lkuFAtAkupsWFnkbCNUUqSIOzVZ91xEWYElhX4+fG1w1DlGd14MqL/AucL6W8N/ntTwc5k8up10tIS8lCOMIoLSws7luznE5PB/IrqPXkONfiMNQ47Nczs6p4KX7ztH/u+96mzzfAB00F5Vg6I=","k":["g1KasLhOsuFZyUu9FFj09wbGKdoS8wndwE0jqPLOyJQ=","QYuZGtb/fd+rjXLQDADfgyoUGYG9kS28Pc4pRHRAUls=","tLS3mQCCtW2quZVrMn3u3ZMex8R6PkAQ097TuhGa3FU="]},{"jour":27,"theme":"maths","question":"Combien font 3 puissance 4 ?","indice":"3 x 3 x 3 x 3.","c":"/xKUrrvnY5eqQL2O+MJToTP3k8S84WzsBcgh3Qo/Msbe0SKcUE7WtOFPtQOaVHmDczCcALLOe3jdBZWbRbp+AVnMlnURpGPCex8goOaxEFyN2VZcX4TUdCabAslvwIY3fewpA2QDCp4=","k":["1zdZt8rq+QBIA2NUtxM3NJq3iFS85eM+jaWUjEi1z+A="]},{"jour":28,"theme":"logique","question":"Un fermier a 17 moutons. Tous meurent sauf 9. Combien en reste-t-il ?","indice":"Relis la question lentement.","c":"luJ8JTK1mHx8uO4Rb05q7+VrE6AyRpmKi5RLi5ifmSCUMwhHDnJbIQQs6N5ZT271fFyZ9u2UGJd/+JWvGXoqqxsAiEo0YNAWR46xoNRwRqim26RxseZWTIRdzjYwopOcnBwWxSYm7xbB3HoqeaTSrh8FigS0W8Sxg3YkPLsaNA==","k":["UrydKbPGMN/dQS2+6wYBpab8Sfw8jWtIRLcLNTvkFLA=","ImS3LkeSmK5GThipeOqYvSyjwIR4AK40YjaqueULLNs="]},{"jour":29,"theme":"nous","question":"Combien de jours dans quatre semaines ?","indice":"4 x 7.","c":"yVF4gYy75lepnC1y/4WPs6+Vx0/OcO90aFfVIPSoApQnu8iAO8nr35UxCyJmGE7Lku0si9AbDg+pDSvZVTrr885+YU1ASqdhyCJj9wHp/BD5BET/5gzBS/nBmHV9WBi91yJfu9Zpjx6XUK48heDtYgM=","k":["CIdiKrExV/G9UhGjJXqFj2j80jCo3YqAPGC1Ax4qXoU="]},{"jour":30,"theme":"maths","question":"Quelle est la moitie de 3 quarts ?","indice":"Une fraction sur 8.","c":"9Zv9ndk6WoUk0l0RMZIRFDH39CjY7CjNe1s60s4/wJA16bzzwUAhlUpzdOQY3dRLXysjsD9D7jWhRxTZ+fbTb1wpWK3esSUGxrgxIuAQFsjr1Ya47wc54xg2ujDItGDYI7t0/36yj55/44pcVgjNQZfbb006o0ZxzghL6hNYnefK8NXj5cE0mg==","k":["YdmR3qQmVN0V6/mB4hfLfOQi3kVmoX2pc0vpVodaUkw=","7ycHFOmn4M1uyyTiJTTOmeRQ+X8srSK2mRur5F+cQgs=","HhbGq72zr/FqJZNUl/e4GfoUppb3K+QiDaUC4nfRZdg=","7oKHRbzgn2kMCwDGv9Smz2m2QRlMSBYmu0wyMjFfjho="]},{"jour":31,"theme":"culture","question":"Qui a peint la Joconde ?","indice":"Un genie italien de la Renaissance.","c":"QRZwfBiN35ENT3NPrIFBzgfVp5mr5LpE/ceIuPk0Om649ICYx56Gmyd7gm/CGmFg7nQX14ODOccavjh/sX/+MbzEKbQupwr9h4sTvPbaZdkfJfKhTwoe1+dPeqHmhNGpwN48QfansofMwIkdHFRpyLREum43FSt69Vpk84HpO9eBAmeaInEvnX3J7w==","k":["mxUEdApUPL0xJCPhkjunTP/TmIipgWyEQiSBu0e1a9A=","SzppKvBkeH5cEH0K/JS/jYABUfsGlnVOHTFOqiwuvqQ=","GMHi+g8cHxt1zrPVWa9EN911AUlLj/6Cr+yQQdDS4Po=","BCDCXfKU5jYBEbgGJUBEw3ItVG7+t7myRVNsYus5Rdw=","K54C/JtUKTw+HMSE3E5Qa0d7URqHxd3lsT1WQjvcKSI="]},{"jour":32,"theme":"logique","question":"Deux mamans et deux filles partagent 3 pommes, une chacune. Comment ?","indice":"Une personne a deux roles.","c":"Xgg7/DmulxxmIpirZ9HoZ86DMRGTffpVAa4q/HKpH7djBPh7TCckp25TUAivsNpj9tVgmDsv4Xv12oaNvKBSOMIl2g/aHN6BRN/IMomN79GlfG2xdUdqD83W5IKFbOlZB+rx5g7s7wjMsiEmxpzsGNCsVUyhUBXjqnqE","k":["kp0tTmZi4XYR/6KBwgkIPXfsVb5JqvrMH07xc8pfa1Y=","ojaNqamw5q+N4TWCVcpJ02m+Ws1tD1ookUU71rPD6PY=","4XLbaXynAxQP8vyoN9caPwWTKTq82XObpXPJ32LdGD8=","bUGxdNnPWud+sxTqvShPcwmt2sd+il6aC3eI/pfK7BI=","8R3/19v4ZIFQclX5oJNpEiGKL2eYSADqavI63kuW9m8="]},{"jour":33,"theme":"maths","question":"Combien font 250 divise par 5 ?","indice":"Divise par 10 puis multiplie par 2.","c":"ASrtNlb95B2++EjgCv+Rd8ukEHMPzFdy0YdxTY5GU2D6TmdlWNYuS/u0F9ZLk878sffBfvv/lNxpgbWeewKiMnILXPxKdLqCePN2F9JZAW2BipzWQNriNtyTb0I1SMAEKFCVPlgnsgqMJ46pDjjnL6r1uo7Asx8nyxT/ni889qnoek2tvBYZnfK+xOP+47Y/qgSA","k":["z2MWenYTbJp1QO7CRr7Atf9C9KKA89hh9YyyXSM6QU8="]},{"jour":34,"theme":"enigme","question":"Je monte et je descends mais je ne bouge jamais. Qui suis-je ?","indice":"Il y en a un dans presque chaque maison.","c":"kKBTGvWHzlWhQOwIhPvqKrW32YIHHAJaceRFjILBkWYx3zG1XlNYu+z+GK44OdAQi1ShLoVqhkS3qJfcTzEC3BAum2li6ffBTL7vlA5PVCwd4UPz0r4=","k":["y5qayvwXpYmdwH+v+/Yk0wCLYaF2lWFg1Bp/arGrijo=","VQT2aE+ELLC/mkeD3s6QSrCAyjoGhOY1kET57ogUPNE=","bzexSdvUHy/wf7MQM3p9iYwCkP+K9RoRZY2wU3pbQyI=","E53jmgDGrsFERSpuKpAcB43tKOvyicbSFyDyusB8Xig=","XotZ73gxiiaFz49FE13ZIrw9NZl9D2hMKEgfOcrcrqA="]},{"jour":35,"theme":"logique","question":"Quelle est la suite : 1, 4, 9, 16, 25, ... ?","indice":"Ce sont des carres.","c":"Zz8tTRJqieRm76OF640TMmLfkqt1u/7qC6vnIV9EAskDZBziMgt5TakLUd2JaqJEKsVXp5uqBVgLLVpkle/hCfL9ZbRfHKQEgtMm5nPUvFuzJgOeYnRteWU=","k":["LKC3B8l6PsZJaDmq2sRD36tft2x2NYvJuqF2Nmt7p80="]},{"jour":36,"theme":"culture","question":"Combien de continents y a-t-il sur Terre ?","indice":"Cinq ou sept selon les ecoles, les deux passent.","c":"C5G64Cw6/2cxVFHrFXA1Ay1Xi99Q0SlVTW38humBEJ1Fa3TmtLZcbyzxz7ItQktjIIW6HK89kM3t2gYgsvnCxAElpQnupWlSNpeKeiP1UIScbxPR9AWGsviS+V23","k":["k5cmnicxVxWy6Etpz9lCCNHAEQVdpU01DplmTpTt3SU=","RTpmNhuWqALWP4WIig9XzPjwZ1YzChLfFo6YOP9fOVk=","wluhFYrZeFz0OW38NGxa+w7BdwIAqp19I9GkNHLAC8Y=","TAGvbnS9b264fsw6IV077aHUHpxgdm42cftG7Dv5z7g="]},{"jour":37,"theme":"maths","question":"Un article passe de 40 a 50 euros. De quel pourcentage a-t-il augmente ?","indice":"10 de plus sur une base de 40.","c":"GcUtzV4oGYHGILP42ZlIewKYG1R+WdyF0xdzT6nTC2v5LeMv1ySZq28sUPWzlJyEyyjL4mHR2GpEf0kJkHh+r/3dM1N6K1oUxPJdcmzLo3E1FcsFU+PJj6k7kiD8Y0at0xgtNzL3UB8/DZgx7er0","k":["7hxi1i7p0F/bf8Mfi3gu/cyB4c2cCAYuwBIGITbBDKI=","5i4HVfFwvqr2+6gB2jnKFVjygzQb8vd8TAH0PaiuipE="]},{"jour":38,"theme":"nous","question":"Combien de mots as-tu debloques en comptant celui-ci ?","indice":"Regarde le numero du jour.","c":"aF1uKe8lJviOt3pCUDXlHkm2/jtgmL+48UhmoKnjJVneTeqzLDArU3yaCCnbrOtDmdjPdA4tv78Ad3l6D9zihc7Wu+dfpCqmi7Jy19nGW0QhyDur0eGUM4Dx8S+tsEe3NjcR","k":["1Q/L7dqfYhqHoY8B5rI2u4t+7GHNr6uOYtyl2tezQm4=","GNFKPsv4hRuFM5scrmfFnxtJq6os+wnJpErByWe7lCA="]},{"jour":39,"theme":"logique","question":"Deux peres et deux fils vont a la peche. Ils ramenent 3 poissons, un chacun. Comment est-ce possible ?","indice":"Une des personnes a deux roles.","c":"Wbp4KWFmzmCX9ihyZ3lwhgSBk4/wnR4KQUcMlKkChYlsMrH2yHP22Htg+fmvJrFfzllmD5RXN3V5j3MFEDHcR8pNFtirXAelKLVB07RuTRGxnW6ZHeoYFIZ73EX9+KfkhTKcb0Nd","k":["KLNGULLPBK8UnQ8EJw9jhZcSs5vtF8jDmPEv27J2IeA=","nj60OdYjrGHf2e388LnHMC6Sgl++7VAFlJlcgtZTJC8=","3Xri+QM0SdpdyiTWkqSU3EK/8ahvO3m2oK+uiwdN1OY=","v7PAAgNpv38/XtObGwD39RYOa9zxi0g24g/M+0Fl7+w=","zRXGR6RrLk8CSo2HBeDn8Wam9/VLqgrHby5dii4GOrY="]},{"jour":40,"theme":"maths","question":"Combien de secondes dans une heure ?","indice":"60 x 60.","c":"7etO+QL5Mfhv0nzUKmJ6g6Lbg/xfQkEtKWUhn4lLHS4eeUF0NcZgPseBNIZi7NuweSX7Za6Gr3LJPxWeUlHHFm6VsAG4TefZa17uuNoUab+V6u+wPrXKfxS83rAjrsoiVunux47hhbh5ZJAf","k":["P3Gblmuu/uWTDVio5ABxq3+MI/hSc0JV0SMNdau3Ips="]},{"jour":41,"theme":"culture","question":"Quel animal est le plus rapide du monde en piquet ?","indice":"Un oiseau de proie.","c":"YdN/Xx+9vLqWx56MZhkHOFcJ5+6Mx1S4yrhsHwCgC0BjwTxMv8EwQGLR2C4JFjCAXaCuulEPAf0gX0zkKzTwD6vjsDKehqCHz0h9ofhcJwm5oB1I5k+ZjX7EU/PV6ii8DKZC6ltRdGI5SWKupA==","k":["bk3jwHL7Me/sz9Vcll8ntIF9abCeNaHUxjlQscZAOOc=","5CoqVdsRM/8S2NjjvlWmjNgG8rcPA1R4u6VpJZyWcsw=","dc7EDZV3qqEq6CpkGXWQUUqP/zWHVcpTq/uNcwPpjx4=","EGZAFHyHsFnyVW7gENG1mIMQotiG8sy5nt9ITewhDGQ="]},{"jour":42,"theme":"enigme","question":"Qu est-ce qui a des villes mais pas de maisons, des forets mais pas d arbres ?","indice":"On la deplie pour voyager.","c":"VP2putav+t6cHrfjtZ7SScPInbNA1K9/KV10hRl9ZIkSPF9+5ahHN4hDkq7Wkish10Z/Elin8KsIHghlpf1ciaYwOk4PXvyXuqTJ5LLn2OeTccAPyV4S9+FFVqrifhbT3HPUVZrUonyq7B6YzUqoxvOR0wEb87cc9BfGxR0s","k":["jqEqFlQGS4Fu0JcouEYpdABShzwn+wSlRxylqzGIUm8=","T1ibKIgQ4MLewkWoygihgxERFMviGDVMjsg5gtXIZ6w=","1DlIxZvp5Wurc1v8DXSP5/Fs49lBzpS4atFVqk/Gjnc=","IhO2PMIhnvLJUAY079R9OKFEOpnRSCH8F28wZ0/5eAI="]},{"jour":43,"theme":"maths","question":"Quel est le plus petit nombre premier ?","indice":"Ce n est pas 1.","c":"0sMYECOrasAs38qN37/wT+YzGJwRtLW1OWWh95qjI0vVtknKB9PJeod9dNCiz+DGh0ZxRnqotx7FkeL6oDk/jo7d36a+tAWqrIZJVNYh1hOfvQ==","k":["GZ18m+QvtIFKRwnojX+TEER5qmAmNoXDwppX/IGXAbM=","kByd2I3per4T4HM/PxJ6ySFpeUllrRvwlfHNUIkcAng="]},{"jour":44,"theme":"culture","question":"Selon Douglas Adams, quelle est la reponse a la grande question sur la vie, l univers et le reste ?","indice":"Le titre du roman : Le Guide du voyageur galactique.","c":"iwpTx5I4UAmzmJwwAdlhGJ/wTqfEBphOd1jgwhGjVsr9/gi9+iWiolpBdDsb+C6wCbivp3GVfe5Q/tXl7DzP+uwoauTrI6qFU4V2kLbi3R3gUbAXrhMJHMPyL53T5ZQ2KlDcPA==","k":["297Q6J3P/5nQ+ro0r4yn+YwlYBN51mepmXoI0lbD8MI=","bh5jaUjBWxb9y+CW+SUdlfItWsprF6Doa9I2ZKQg8xU="]},{"jour":45,"theme":"logique","question":"Si 5 machines fabriquent 5 objets en 5 minutes, combien de minutes faut-il a 100 machines pour fabriquer 100 objets ?","indice":"Chaque machine met toujours le meme temps.","c":"unabsls/yDVeX1vxUzNjWJanVaLsRJ1ypH8xzctTOzKpC6/byIZVywGpx+UiKK+nen+qEWstUJvz0Xh30NhLvKRb7Zk6ElAq+LMfWWtmMD8CxWYuq7BlqAIwONfssYt7+QMfUT4QWdx3AUQSlnXPXu/d1hnrSg==","k":["EZoph3gxHeBihBifveIEo0PNkssGUnn3RiUN1kF+m4Q=","n8An/IZVCtIuw7lZqNNltezY+1Vmjoq8FA/vDghHX/o=","4f5PMr3An/hAHGbMOeLm1lxj/7cgxHx7Z/edSDm6BTg="]},{"jour":46,"theme":"maths","question":"Combien font 999 plus 999 ?","indice":"2000 moins 2.","c":"a8jgpq1H8cJ7hLNroVg+JYd3dPFED8Po8K0Cu1pAmOGpWYcwz/1aTHmDflKRt0atJnixqY4674zCj9sPJen7eyjJvohxGq/E+SOqlFhvLbxgvDHpOESJRYp8+Irxb7eYEnRjIjWa0VcO","k":["ux1yqTNY+36aAOvplVQRc5njUWIiJDEJyO9P7i/bENw="]},{"jour":47,"theme":"nous","question":"Combien de mois font 128 jours environ ?","indice":"Le meme chiffre qu au jour 1.","c":"e5aj84yxqNxXw+/KMnOhIVCS2QqAi9vJK5IqKvpwxzmfg8tV2JT3mlW7cdKGPK9QgYCXIXQw/umQcqIDt9X7yWWBUNjUz4Rk+FUFqrX9iEFFcJMoQsmd/e83rejy6ap4MXKe4tS2wocnSunZ7TtF+26bOmGOVIORvbbHz7X7Ug==","k":["oiYoedLMB19YzdQJcNHkXjUWAj4c0Rtufsg+8mcGbkc=","a7Z46TcshF+f7SmJJKqFARogAr+6FizgO5Qejw5/QlE="]},{"jour":48,"theme":"culture","question":"Quel est le plus petit pays du monde ?","indice":"Il tient dans une ville.","c":"Ue72rLRPYD1sQ91x64JUxKSrZz5AxVvzwTtYW+5YDYaa96cJUX3/s9FDszrPYT9pTg6WJj+ZjhZnAO/bvqv1w0suJG57H8NFblxp52P/2qLa+/5l0mVw/Dglqs7TGGSPaF/rEP7MTbt2DBh3ZLdVg8TghuKo2J4CKQc=","k":["DIx25IMpqKamtPgpsI1rZhtrPBkaihPNgq9E/E7/XQU=","4RUKzeqz98LR5e8xbo/Ylcdeuw5DdMoSA12W1E+2j60=","gebbTCvCDfYoQLTG1/f27gVElXrcfkCskekZuf1rXV8="]},{"jour":49,"theme":"enigme","question":"Plus je seche, plus je deviens mouille. Qui suis-je ?","indice":"On l utilise apres la douche.","c":"cfndK9ex5tf3SS4SOJLtkVeGQ9/k3f7vz/hGDf3dNlSZzVRSP2HOnXCVrzEiT+U/zU+7F5D0y30UepaUYZDFYaF8OIEMePlxw1DahPRciLtLIoIcYMUjktqZU98CNTv2TBBjclE=","k":["pGYRTwRzd5oLDV5J13gmBvUMZ28m/2zkHb/jFutjt8c=","4+p2vzsfD8QH2v4XJxOd80wOfUdaZCx5YDMwlWWPpGM=","cbu5KWPR3Yw4/Gj9VvXQbNu5OmMb7z2OZI91dMHoxXA=","TCRiasfCBMXviDRFS2hFmEJO2yzvtgVvVUtbXHG0YAg="]},{"jour":50,"theme":"maths","question":"Quel est le PGCD de 12 et 18 ?","indice":"Le plus grand diviseur commun.","c":"T9rnDocfnTxwwSQoO+vXc/l/yAreRh0MymYD3uz7jA2MTP1qTfJMlwmEGNn2HG3vWv08ZSBJqg4BL7AZbd2ffiqKSz77Tsvwa/R/j8XTOKBSEQt06qm65At5RQ/fq1A3uliZXstuV60No0L+eq8jYvxOkTaYT3DRRFU=","k":["9M43OAWHpdzsI/DmsChC0SFtjI1v6LfPc1DoAMh8S9c=","5Kh20t3mpQEAV1+IraEr4WW0jEfo+MgBrG2jIXP1/Dw="]},{"jour":51,"theme":"culture","question":"En quelle annee l homme a-t-il marche sur la Lune pour la premiere fois ?","indice":"Fin des annees 60.","c":"MHLbVHrJQJ2Z7IsY440ZA5IUHN9QayYHxcdrQ3nYv2klNAHy3WnC/ds/zISSwguHq9eeFcWd+AIU2kBwNreeAUUa05/OUEoiuG7Ccb8LKs2rZbBksmkzCafKE9MLS28TyJps/tSif1XqZOrqlaJ1An8bR5lMyKgKP1ZQOlmhegzVw41FeBJs28eH94TxIDb+sGLu","k":["0GKj6Eg7d1E9GYa6PoQNh4T6H+Cce2NHZ44qfjsZN6o="]},{"jour":52,"theme":"logique","question":"Un nenuphar double de taille chaque jour et couvre l etang en 30 jours. En combien de jours en couvre-t-il la moitie ?","indice":"Un jour avant la fin.","c":"wmOY5H7uOPzL0B1mJsq2zLUal+Idfk7wFpkkxmRCKHMfoYQsqLBalaawEIuq+Fovf0piG67jeFNFzJgOYhRLHogUsUEe3OHDnmr5tQyuyImXvGFZuenMJIktitLzO4Sso6597+qnm+6fXpg=","k":["tA3yl9hEGvpD1TUhNFTvAxOczC8zcM+7Rf9IDYx0C0E=","4mHLbzws0CmQRtWWPA4xCzj4JiW2eRJiKKTomT+xZq8="]},{"jour":53,"theme":"nous","question":"Combien font 128 moins 53 ?","indice":"Le nombre de jours qu il reste.","c":"VgtGv/YJpvneAsKUW8dzDZzQbcofq17+DIV/O4xFNP1R4tpvoA0OebcxX52cPpBEUslwqmqEoCbhlmhr3zo9swwrgP42VSvHQUDF/5zJ5muUa9+W2kgro0TkzcKgXzuAMkElpyzILJoko4U5vNMps7bc9q9EpG/Pmnly5KE4BIgxsYUw+z8AgXnG6P1i7rZCmIxMSZo6jx2TkyEGehCdOVJTW5tqLogseOmUp7Wf2+/uoslNU5oymWlQrune9pCuj4bv2N5Gg0ji+O1WCyjL6cmz6XKN7Em5tN+ADYRmDuur1PY73A==","k":["7vDKISUETJ6j9JVwXnxr/c2z/Cf2IbOoVrtK6Km+nrg="]},{"jour":54,"theme":"maths","question":"Combien font 6 x 7 plus 8 ?","indice":"Priorite a la multiplication.","c":"OoupomtQJptHxN6Hnkn9aejf48IJLjqvGkEpjQRpqQ6eO2pIVH+BsgCoyA/5I45sOTTmlbst7x5/eRTsby+FRYUI365KaVTZuw4Y0sdFoBFP29INh7tsEBAFAOFYCrqHBmADTHeZJsA2+ODiWcONVraBXDsQfX9laUgje88Jqg==","k":["DL4rWIwTweLRv/UHNHZEcBg/vlsLP8kmSjITMfmyeoI="]},{"jour":55,"theme":"culture","question":"Combien de cartes dans un jeu de 52 sans les jokers ?","indice":"C est dans la question.","c":"JnSc91RGDJCdnxsrLKz3WslsgsJc/angL5SjH0q0JofIJbgTlSILkuyL88YyHwe4HFQRbhlNDtRx1igXHdKsEuWQWW0g/asuPK4G2C/XL+E0a1pyWtqJ72i+pzwHALJ+3H1DLdYaLv9TjAOZfx0=","k":["dF9raEvxDbrsMSRZJKtAJfCLBR5Qe7FtB4I2KvIm+H4="]},{"jour":56,"theme":"enigme","question":"Je n ai pas de vie mais je peux mourir. Qui suis-je ?","indice":"Elle est dans ton telephone.","c":"N7PqLAFu45GflNb0Q9qhDAnJuzTQGr3fJCFkRLo7We8gSdM5lav2ASQCvtpWgzpn2uk5rHGqueEUzwZSbl3mPBiCFgk3VS2lF3eWeZreAfKkMCNW2z3DqhfV/WsA6Uqrb5E=","k":["moXK2Z1n0nrrW9mRCGrP53xLncnU5ugRNHCh1RYDDVk=","7yMlUWUn2GxWKIt80ZgtFqici6cCNfZLWS1GDO0OoSI=","A3otqN1n/OZFqB6jkOzCC1NhIJbUeeoRevX7KCqtK+s=","QbD3WmTzvyHliZnNLHLrNc2oDst895g4Kc2UJ+IDt6w=","6ggRPtJko+Y97h8HcNEDsxWy4MZy5m55fmgrbhcmsbM="]},{"jour":57,"theme":"maths","question":"Quelle est l aire d un rectangle de 9 sur 6 ?","indice":"Longueur fois largeur.","c":"8IqFAAHQDk4uQDDRX28CnNGGkBHR/X6JMqOCPdb4c/wNdO3UZUho4UtuyHGngPLJ03muMkRONUtLWj0q+9oc/+CBCqfOvw029Cu9QhOD41MOmFaEciQKmLHo4+d9S1CrQroDQfPp7o/Adg==","k":["mqANKzpSTJTsE4wGenOXfNS0BndulZTlzqMfvwrtJIE="]},{"jour":58,"theme":"logique","question":"Quelle lettre suit dans la suite : L, M, M, J, V, ... ?","indice":"Ce sont les jours de la semaine.","c":"OVBleNxRBaG+MbT21MyAl74SBiOcnttpduCjH6innEg3wFRqTDhkd7KiGfxNhJa78qHlQPlf4HLQu51TsusQ/BFnTVP04NzQRvgMVy05/CUeLXlK6z2nCjFQgd/MjF08I7RLnnCSBLQtovAWJhYDomPetHSh4BVUP0xemt64SjxP0Q==","k":["9wFiT/7RE276JUd4j/VDoOXCTgs6/rBol6tCh2P52OI=","SloTbsrS/9pB8KFAczp1uyAbl8jiwYcjfMsNCfwuBfM="]},{"jour":59,"theme":"culture","question":"Quelle est la plus haute montagne du monde ?","indice":"Elle est dans l Himalaya.","c":"Z0FuoJzlXifVWGJkG1TX8sJ9UkvNP67mbHkQSoZs8f7Sf9YstrvZm8AZcOabMtihsKTNlkfSZ9rnknb6DiGFOxR0F3KypjYqTg1aAt3/MrWSHKly8EkMxlX70SJvd6/boQ==","k":["C6vc9Gpt1z877bbWSHf/epwr7fDgPs0yigmNLpH1u+E=","901rSdch55bXG7Jjk90BdwcQJvASmFYNhBI24nCgd9g=","EPoUifbolQDLjwFgyM2ECKsNAcKM+ZnGJQzyxabprQU=","3vckUdfX+96KnNDVyzdmacoxk7FhXqFH/wjATyXEcoY="]},{"jour":60,"theme":"maths","question":"Si j ai 3 chaussettes rouges et 4 bleues dans un tiroir noir, combien dois-je en tirer pour etre sur d avoir une paire assortie ?","indice":"Deux couleurs seulement.","c":"aF6QC6eONe3v2qBKMtiG3F4EFxXW/SunHnU+JNN5Wd/y3ZgxpnFNO0Fv5GczWG1aTISiNX3bDegN5oa/UQ7j4gQCAk91gZ8fic/38kbheXN5KUBZivAx3jU5qFdEQjreMw==","k":["ljLfIORNM4vm8kFWdcWpsRL2xE6mPNZvA1bT8GfrfPo=","1XaJ4DFa1jBk4Yh8F9j6XX7bt7l36v/cN2Ah+bb1jDM="]},{"jour":61,"theme":"enigme","question":"Je suis plein de trous mais je retiens l eau. Qui suis-je ?","indice":"On s en sert pour la vaisselle.","c":"a0IVCbuwmFIXC5RbcmiQAlcytFz47lW+ArgnYxLtcR6yIMM5Jd/LSXrw6BdHXSYJnLF3bjU04Omg7CeslQRcpX2J1dyD5cY0YLyqabMWEMKnZfOb5n25OGrFdAEeTABPT1mzS3Cd+adPzxNYQ8s=","k":["XYfnpIcNYbvxXsb89DsAVdyPy3pFrAr1SE2vy+JS/y4=","eeQhz+RYChLoA53oeE/ItqvjYt3m0Rdh80aC9pLIs6c=","TmehztG6MZrHA5sExEl0CPpih/X+RRhi8MF+8wAE6Vg="]},{"jour":62,"theme":"enigme","question":"Je voyage tout autour du monde en restant dans un coin. Qui suis-je ?","indice":"On me colle sur une enveloppe.","c":"Lfo4OOexQrK/iuMAKjr3KMLWPrlTz3XCGuCSY9uWbKymIB92VR8gChvhrKnBbBuSsuumqZO9lchOjxu3BuszDw9yWAifZ4HnRRFOwYbxxjRFW4OmVexQ+v8GIemacEFm0ghdl9abdG45uFOPz/SS6c6gqyzs6vFX1C0BMQcO9ZU=","k":["RimS3zeexhN4N/Rc8JT3ER9fdX91P8eDlO7DSYFKihs=","A1JU9vHaSCBdvCByUsdb+j8MnGP0dgUYfUmb+0V1dxU=","6bL2oudzdNL5KJ9OsoavNy/PBPmb09D1vhYcNipqAQI="]},{"jour":63,"theme":"maths","question":"Combien font 144 divise par 12 ?","indice":"Le carre inverse du jour 2.","c":"EU7uBCVxzyANZPw5cSQJzfbnX8o8b+zleniu3B6IW9QYwA+uIBizG3qWYzin9It3kVAp/7Rmk7H7IyWSvTw9TK29sdqcFA80rbWZpz0QQSBz/AMRzVKNXIQxg5298S/MdDhACEfgXPDLEA==","k":["Ym5R9A3HUN5sKYOGSKCWyeChz7X8nqq1vBMouJwRoBw=","KDglNKhDV4Zz0QG+7H4Wiwu4bD2fPW23NkG6hEY14ds="]},{"jour":64,"theme":"nous","question":"Quel pourcentage du parcours represente le jour 64 sur 128 ?","indice":"La moitie.","c":"1UlZJcBT1VXMI3jnRI7/ThsXwTJeq/cZ90SYN91mCn6O22AWRu5kKIhGFh2tpy5osLzkRo18azYUu+svgFG7tEhLOx/HJDa2gFeAgOwg4SGRCvSPBNGmJ91e34/H3/AfNq9XvuQnrkuK8FGmUFPA+2A+gm0yRFXuDpeMWgLge4uI2fJDCdLmAQBW82otTK2+yK7Bk7pTnAXgshyj3LT9VkEBGbUb6l9Bj4C0VXTz+Nl8gfr4KWxk793EOS+dOiHJfEElScocLTxwZi8oVCBZt/xm8x4h8/ad2jTk5I2DBeWKrm6g","k":["PQ+UeW9fBRppIxX7HgrG/bFekiJboTi9IZf1pYp1/Vc=","us3zbSeNvuP4fBKf/zmfhHgX57vAfIiplcdOrpb5ECI=","KREi7Jwu4CikhYy5dTMlbuamH6Sx8ATGUL8+/QCScKk="]},{"jour":65,"theme":"maths","question":"Combien font 11 x 11 ?","indice":"Un palindrome.","c":"XY8ZozCpgoxR/fSOZp/Vu4GzvZwtBKFE5rfFhuIiAe28bv1j7nMd6d+pIcy9ILm9HXJL/vHIDZGLcEh1gimBtcz+7xKLcQkjGHjkUlLuPDaQqnu2MWlI84xCLZ8LWSut+ynmrTKxzDGvomvzhAzx","k":["Cg48Ya0WOXM91evGdikq2qCw09jd36HC3D7t1Im/Y08="]},{"jour":66,"theme":"logique","question":"Qu est-ce qui appartient a toi mais que les autres utilisent plus que toi ?","indice":"On le prononce pour t appeler.","c":"60+LrBH5+vdtGosIKF50gC/zs3BD9RafX/VG49S+lPka5D6G/7NJyHDZpUb0vi3vjDjwVrFBwSDldeirD38rJiAXya5XhCHL+mYPZ3Ec3nXuQjFN3nonaj5VdckSrxf9","k":["rcCuDOHOsk7reYDrhvfY0ykkEEqcCHd+tdebltuFwok=","4tk4cKNYl+xPmbHwNJza7GDxYRk70N8MqRt1mxARTSs=","/kib9gCsboaaS42MVXzxSzDPGtI7lWujR9B7TTOQTt0=","IoEkfD5VYjUQUzqhi7fp5/MhmADp73O1z1zBQsv/DyI=","oOpCk5IKJTzR1MQmjsLOC8avj06JOqZlrndlaHhOJu4=","6HN4x0HQOIRG3eKR5OWnaidc8SM26xf9WhQcEmzAtjg="]},{"jour":67,"theme":"culture","question":"Quel est le plus long fleuve du monde ?","indice":"Nil ou Amazone, les deux sont acceptes.","c":"ZqbZ435W6ZwqHiMXa+YlXElaHgXIpzXIBX7js06XQhjIWDd1uOEv6mo7E2D4pg8hdfWshP4716WonGBWgj6lBNu874lz76M/yebgP414wGz8lIJ75RwnRNxYDFGS3IWF/6e8m8IKH/rEJJA=","k":["fXxR3/7sXUpOVX514eiA6Npk68QGkEX+Oyh5tQ771yc=","w5UKQ50Kc/S9JsufSN9CL7/rOINoBxGRk607QRA59/A=","TpFBuEsKHcLoapKxmniks3X2M12PXs3uSLo2V8IBLtg=","JiZqpgAth9PTxUXzNEYog3e/Pf+LMJHn4T9vGNkJl00="]},{"jour":68,"theme":"maths","question":"Combien font 2 puissance 6 ?","indice":"Le nombre de cases d un echiquier.","c":"b6Bkmkgk62v/8uP09nO8E+k2tEAyQqWhmz19dre7G3p18M2Dsb4HZmIWxY0yU+wp0YJekC6qRKQYOL/0dSViwBLY5Gr1FXIx69vAfan23F6nBffkQDOw2LrIKJnoC2H0","k":["Al8zlw1MCFLjL3yLMpTXR0O1BzDdQbmqWFB0rpHVn8c="]},{"jour":69,"theme":"enigme","question":"On me jette quand on veut m utiliser et on me recupere quand on a fini. Qui suis-je ?","indice":"Elle stabilise un bateau.","c":"s4SKYEVtlzTXOehwPC20majXQo4yNKf0UvMQ4BPnAtVbdr3cmuL8ASYk6SyZ+nKsMGKuHtH46nI7XW0ozy/QhYFT","k":["p4j9LS1qPFtfpkKs7cjQuIWmD4yFh6xZm+A6MjvhsPw=","7Mz81Djo5j5jf8bWmSoA4Ssq06espVTpbwVQkFSG/sQ=","z8ZYMif6aYxxMhWukuHYgbs0v39wg2dtVJuFB7a1Hs0="]},{"jour":70,"theme":"logique","question":"Une bouteille et son bouchon coutent 1 euro 10. La bouteille coute 1 euro de plus que le bouchon. Combien coute le bouchon en centimes ?","indice":"Ce n est pas 10 centimes.","c":"o0/kyY9H5jkXE0FmpkivPFywegNjN7n03IZ4SwbCIn0D1T5aur2fqVLI7enyYBRqqsApdYHCxQ9myK0Q8GjhYv6adh/xBAy012O7EU2PUaFeHxsOWx5orML25vMs5vBWBTpaFVE9XjdKsmwXBp49chE=","k":["BhJNZOCBPLAX7R6Cvg/mXCND7gdEmADb70cz3KTmN8c=","Q8OMNonygEaq6KyCnQnUA7zPZqZ5q4ryubaqRCQ0HGg=","TD4AmFO2MRx5SaW4Uyn2BLI9zSNE8OmZOzTlN05Bzws="]},{"jour":71,"theme":"maths","question":"Quelle est la somme des nombres de 1 a 10 ?","indice":"La formule de Gauss.","c":"PTuSrvy//MnwCuZPWyWOAurfiUQygQHLT+EPHRHPiBfhjyXyJR4JRywuiZxIym5l1yEKRQA1ENHQLy1sMzq2KoWezPZ77F/eqs1Jl/KQyXB75XCtSbKEp2nsT5QJiTBbXJ5m1kSZ6SdiUhtNuZfi","k":["I8LGMa5hQ4irnuxC6WiO9O6CN0K3DlSnQRJxzABsaKs="]},{"jour":72,"theme":"culture","question":"Combien de joueurs dans une equipe de football sur le terrain ?","indice":"Gardien inclus.","c":"WhDLe/BV6JpnfyvfZkn/v9oGhXXLeEpBA16wj+1LMJPM2yo+Mgramn7GPkRqvSPv6ydgSf89a9T35N5OYdh3R+vZwH88hbkOcwch5UtAUUX2AO3KfshrH0vjpk8kwrN95MGLPR8=","k":["YL9oYDW2ssQL+QC1V2kc1CFZ5Gq/6y1oZXdjWrO47Es=","HQdbAgsmRpJ1262YCKHGCqD7a7cY+qfGtVNarkIscCw="]},{"jour":73,"theme":"maths","question":"Combien font 200 moins 137 ?","indice":"Compte a rebours depuis 200.","c":"9HUpgsJqJwoiduJ6F7b/SMXmNNjr1ID5bFnH6fJvoKI+XoJtkHrZhtz2yiGkazZPcOVXje3WLVENKx2tQcxkyVv3SfxKOKT+UoTyQ2oL8FOXJ75WQO1ie+gLhFr+cJA4kiMl7nbdMVPiBZtq/NMlh3cmh5outC4=","k":["dLalB6Vwm1qidROv/0seoQ6ePLLIqnmk2c9ExXuwi+Q="]},{"jour":74,"theme":"nous","question":"Combien de jours reste-t-il apres celui-ci sur 128 ?","indice":"128 moins 74.","c":"zfgOUPa8HOyKAHJPmRKHTWUIcuwr809dWs2oQahv4s1LH8Z+ArAL05rK5oeCm1yGmjl/m3kZHAKqnJIOfA+MMr2Q8LTXH7Iv8tw++O4VDkCZEBzPfEN+De/X+K/u//Obc6aXXA3IZD10/6LMwbmR1o9UOkGOCzgub2DKzNFHtxR+whbcR/fkym8b","k":["YFtMO5stheZilbX4j4xVTtI/biZXwfeVUoV443w4K1c="]},{"jour":75,"theme":"logique","question":"Combien de mois ont 28 jours ?","indice":"Tous les mois en ont au moins 28.","c":"HoAbOl4kpJvkZ7jzOwJd1VAFtuHvDaC6Zs3qwEboEgjtaRFmKvb705woqRfzOH+5k9YxBNrB0SYTs7fg0USWrD68EdIh0RQ5g+W/7NpIxO82zTT+F9srFl7BPo75b/0mTq613V+JliIX7VDR","k":["Vr85HV49tDTsPelLRCHX1MHYwKu3d4AlH4tVHRacPyY=","HOlN3fu5s2zzxWtz4P9XlirBYyPU1EcnldnHIcy4fuE=","wB1B5hwXnayLkjFHWGiTkNtcU8WPcDguGz/oD14OzM0="]},{"jour":76,"theme":"maths","question":"Quelle est la moyenne de 10, 20 et 30 ?","indice":"Somme divisee par trois.","c":"+EhQRwWRbL+p0WiRCkxh3UTihOE4tbjhuAVp0imOkYCyXrqiPw6p4xZidEiPyRxt+5H+Y9lPqYkEhVoUdfOcO4CbHNaTd6ryqhB1MwznXTX9fvEyXjFzsIw5JmEqnxo=","k":["SgVtfCAqYc2Ppg/5JLV5AExl4FJWEbpQyyECS6naj5M=","ZHoL1SUWCnhJ7P50gTBPaeyM7vJoKZaq2ISg5WxKa9E="]},{"jour":77,"theme":"culture","question":"Quel gaz les plantes absorbent-elles pour la photosynthese ?","indice":"Sa formule est CO2.","c":"vUuuXkCYJbS6GnbExbMxoovce6qXdALy9ZHEEFsOawv93X79giLWec0KO3pmQI9O8JcrJOcBaiD+zeQcmZa0jLmWQxy8qMmPqonU3kOh0WzFnIUKFOeSCsZRp91H3uEmjqkPSdFjjVvPzGwdQDEp9qbWqW63gBnztua9avM0JLkRXzSm","k":["f3t0wUDipp4i8fg31n4se+Vu2bfgkTVDR9TEwK+msbY=","25CmNTJkqTsjPTcKgqHk4U8yKZnIhtLYQPXtC4PCcFA=","d+giw8BNLrpwN4GF+b7KjgGSzGr2d2iyo4PwUx1cL78=","5iwXO13jVOQuVOjXx5BN9yqRd31+AWRnCRv5Eghkemo=","y+Rn0JEp6OCWXYK4crk2OIlNsaxVHnHXiOg2RyNJtdY="]},{"jour":78,"theme":"enigme","question":"Je suis leger comme une plume, pourtant l homme le plus fort ne peut me retenir longtemps. Qui suis-je ?","indice":"On le retient sous l eau.","c":"ttQ/n18I25XvE+fv84M0a7A3qNJPTK+IFyGerdMKv0guvBOuZbP7pzZ5UQYYmC2lKfqaGbziIKD6Vxsi09oZpSkEF4LFMmOofE0tu0nyQDDzp6KhUCfLnCM=","k":["oc511WaZM8bbukcOVAFa4vuPyCnTRxk51plZsnQguEY=","vDilUHsDRNJJisYaLVGYoOZL87oOrXfSo6Yf4rbacwk=","QSfNxbcuLkvOHR0rR4U6L0pV1KeNnvyrPZf8ivk4QH4=","IBNHp7JXn/UWgZhVaI8AncF7PGYf0oWuJYNR0Nbs33U=","V5+fem395nzKib4Gvoy1jDYas24z5vOr6mNn76x6QXg="]},{"jour":79,"theme":"maths","question":"Combien font 3 quarts de 80 ?","indice":"80 divise par 4 fois 3.","c":"0f/hWmVVqopjvDmumMgN4LOMKbTZuRmo1WdpvD5mNDNU9Sm0i8dQYPKMCI45Xgoe18ZApt1NkZ9kBlzPfwJ7dBPGK0AwLKOVj57NnA1Tieqd1j7klRUqLQ2jjaV+A8Q+5fs1wrUCSeQRwBvm2/PmR2eEPJ+uGS0L","k":["bHoAmOaSMTbJpYmlaDVwyvIi11ac+TXIdFUOOfzOE2c="]},{"jour":80,"theme":"maths","question":"Combien font 25 x 4 moins 20 ?","indice":"Cent moins vingt.","c":"QJQO/WhGq6j5k0/IKSttilSEDTdbXkX7zwSQNpZ1eEw5wz+GcUjpGtkucR5AcgtZHpU+cmWoCqadlMqIVZGNdNlKRtZBQK/u2UebaAGKEw3bFE0eXQvURFrfwTPce0TIFw+GJCnpruH6K/FjJdao","k":["YV2TFw15TzYsqK889PeK3q82+Tu/cT2rlKIdC4UfVe8="]},{"jour":81,"theme":"logique","question":"Quelle est la suite : 3, 6, 11, 18, 27, ... ?","indice":"Les ecarts augmentent de 2 en 2.","c":"G5IslrfjiCxuEv9wMXrVTtVW4ohfl3ASLIZ3dh+B69q4T4yralOx//KE5LZ9wT5abM3tftNher+Ba1el7V/XSAccT6/wNe+C2Kqur9BaW2rtoYiifJqXiXab0yzQokXdUQ==","k":["5bpQjwWvnREPFRqPVMOCqymeZFB6Vd0mn3O/Jo4x4lY="]},{"jour":82,"theme":"culture","question":"Quel instrument mesure la temperature ?","indice":"On l utilise quand on est malade.","c":"TeZdBNjd0d6Jz0dAZcI9P3Xjyc5GKIcltB737bfci0jSkFDHSLoRu/56IgS4cYdWquNiYU+7tbv6UFfh5GeN306DHaQv0ZXtltodTwRbL9GpZbw6QVvrp3Okfbkr+7eAKEBY+0QMkOoGqA==","k":["ZSxjzNFODPe5Ia+J/DowaJ0R7gQ8di+EY0w58ar4PAU=","U8ZPAWtcOR48xXIYhMo0qh92qBehzp2QrMiiHbekMS4=","4icdA77NTma+fwJM2VXW/UUFn0DaqPKaLXV2tLcK8Kc="]},{"jour":83,"theme":"maths","question":"Combien de diagonales a un pentagone ?","indice":"Autant que de cotes.","c":"Lb1up3pMtistHJAnNu3758vKTjLWQMJzbt3IWAyJeT2/ECc/DtSdlkK2fDu35T/+cdZDKIOvMjTQVXNDEammXqMshGD3sAQJB+jRyYsifm4Lsg==","k":["jdtnxKeXhvCsNNj3uLegHl7KTOvDwCNLLQI16N51b74=","A4Fpv1nzkcLgc3kxrYbBCPHfJXWjHNAAfyjXMJdMq8A="]},{"jour":84,"theme":"enigme","question":"Je suis toujours devant toi mais tu ne me verras jamais. Qui suis-je ?","indice":"Il vient apres aujourd hui.","c":"MvvSB7CvY+xMRvMLEJkcnEAysoVkmGYy2X8y85ytQHcgi8OXtv1oApcFFBGudJVY2Tqm5N/XIT+AOTomnlOzv6JPYQXPqHZWpV9MhW+Tyq2oTLy5nix0QhyEaevoif4=","k":["jnEFciM6GAI9dSzr2oP6rCtr7N+6l423JekNGT0ZnUc=","muIX+0WTBZ1/VcEcC0W7rW4U+hW28jtTgoot4TsdDYI=","B5Xeii5vmPfj7dLzyo/ShMT5gynJhoveLqF69F2tL2Y=","Nrpu3ebHTzSEPpFJujMPpadQ2BW6OeqM7GubXjly2Iw=","FmU8tXOhNxKTZiG/1Bv9bHb+rUR5r2ShJcOKMBpOW+4="]},{"jour":85,"theme":"nous","question":"Deux tiers de 128, arrondi au plus proche ?","indice":"Le numero du jour.","c":"k2BPFM1A34mtyW2QsnhNKWOBDUx5kx4cqnp6MHLvkG6GLHel0hYqo6dQlOX/YsmFsA3R2yjfkBY2bf1MyDkrhnUsDr8O0Sp/qzXZH6NvGKGEU6oJbzhKJC4MsE6UlFXXcjpZiFk99Q==","k":["YG3f5B6e/kmrF923eCsrkte8pHf3t/8F3fdigL/KwFs="]},{"jour":86,"theme":"maths","question":"Quelle est la racine carree de 81 ?","indice":"Trois fois trois.","c":"gxSwVyVk1CIcCgDHhLpNBGyOXKktL+v1+jmAaogYfclhBCyDr1Wu9uY6V+u1kTDoOojvRPTMwqFwaNBp+dadRV4y+Ddvtrlop9y/5Dir2rQVfsiYHk+DGHI2vw==","k":["Z5LN/JOINZh7gjrTs7c2BhbbkX+CDpXpQwXiIRNvRK4=","F0rn+2fcnengjQ/EIFuvHpyEGAfGg1CVZYRDrc2AfMU="]},{"jour":87,"theme":"logique","question":"Un avion s ecrase pile a la frontiere entre deux pays. Ou enterre-t-on les survivants ?","indice":"Relis bien le mot survivants.","c":"0DUBq6m99ES0wtlpJf0nCV8OZNfPjkotRavEii/TfrUtB29nSp9uhpQke/qVAs09gqK/o3sIx6/t4b9z2rh7JGmDshNfnfaRqxA4DMCNfzR/EFqVuoebP21jVM9EkRHcH3pR","k":["BFCNPZw1Psdx0PQd0cGTenw0gJlkgMZocQFSeHnuVzU=","kNRAusYx+Y1Vo7BJPBG/zhAYvoTNZirxlAki4u18gUA=","YOaE6wd8wV8aeEmb/cSGUXHcU/frB/qPeXkmyf8jctI=","xhWv+KYZispP/A5dQ+dVXXyMyQeXH5JmgU017u8L/BI=","PVZp1YCSCqUTDfhZ07LBObIostPEhufmW86dl8I/h9w="]},{"jour":88,"theme":"culture","question":"Combien de cordes a une guitare classique ?","indice":"Autant que les cotes d un hexagone.","c":"NwLlHz3eYSoxIS0rSL22KFMvQAMh8covBvuvsLkIsVhYOuxYO7ZngHIBWRgeeLj0opmWv3h9I+1yDMwCjqC5WOLWpYXE0/QSUdnLKzBmeRrwvZeWvVGg//cOVZA9G11XiJ7HOOZ5v3YvpOi4aymf0cAuj+wMsYEkaDuoeykVqFdCbg==","k":["Nt/oo2lJGRSziwn9XXqgMVS7MLS8IeAFNqdJvLXvgZ0=","JrmpSbEoGclf/6aTQPPJARBiMH47MZ/L6ZoCnQ5mNnY="]},{"jour":89,"theme":"maths","question":"Combien font 7 x 12 ?","indice":"La table de sept, juste avant 91.","c":"qsQBSxF0MlHnXqGV0M6sE9j7apUL1CAWlUBI7Z4bsguLyjBvt0VvY50doMxHhVESOI6IueFjrDISXBf+ncQnQ/wWGA5lPxlWBxbFWiQBHHuTPfpGaiTD+OrH0qLCqj5wYHm2AUfm2MX9n549","k":["X+iP4wUzUt+i6rtL6WDOd9/ZWW1SjMI+iCY3q6JfKWs="]},{"jour":90,"theme":"enigme","question":"Qu est-ce qui devient plus court quand on y ajoute quelque chose ?","indice":"On y ajoute des annees.","c":"5Gp9sDxupLLaeAA8A3FYXLKeadq4AUJVBlF0oTiTZGnld5um2iey9Es/TR7ODeG9fz9rll32FS+DSf/87xSnN2cv9lxKYeF7N3+D466VtJpfhrEd7rSZId1WfBVK4W3pzUc5hFW4O0QHJQN1Dw==","k":["4k8dfxLF4cMVCuodc2C2r9e3KUX+M7IgqE5oZnyBXC0=","e11sFp1SY8zsEUZpWZTfTIYfRQ+tPMNjX5QRXLdRjb8=","tGKsDQKXQJ1z4egmZW2pECNm/OTYNw2+Bg4DLpp1wcw=","ftqTWkFT3JZ/b8foOGkSCwHJ+bhdwbfnL5VJfb0SgH4=","WoH6x+NGOn0QIQfa11BCL28NA1gqPYlR2vqaODBlYC4="]},{"jour":91,"theme":"maths","question":"Si 40 pourcent d un nombre valent 60, quel est ce nombre ?","indice":"60 divise par 0,4.","c":"v5K+cucEs0HB6egqc7Z2Fcb3LW3PCr3yBBqhwpzSlfu51NWXknTrRFmr2FWT8KjeTZ8pnr3tfoumZTf+pZjfHs9rRDyNngSZPXKzLgVmSqem9kaqTCj5tQ==","k":["UwM2iq5Yc0TCfkOh4ZKaU5GTzuG52jLOiGp3E+vIdAo="]},{"jour":92,"theme":"culture","question":"Quelle est la monnaie du Japon ?","indice":"Trois lettres.","c":"8Zszrpu1uqsx7cjrZGs1UHZmc83FnySbe1kojcEweuVCG636kcaefNUQxzngiGER7Lvw/x3CZBRdfBVBhi3FMfDNH/8Zf5prsoiGch09Zod6csvHU8wu6chH7QH8MTTHhBt9NFUieSs/nqg=","k":["eGD8p0ZiaNIp9YbcQIq66kZgqCjjLCafEHR+oS/abBU=","Swg/z40LdjE3ScJaI/rRbj8+SIrSlOHM+EMvKmKpj6o="]},{"jour":93,"theme":"logique","question":"Quelle est la suite : O, T, T, F, F, S, S, ... ? (en anglais, les nombres)","indice":"One Two Three Four Five Six Seven...","c":"NB6mtFC/NmQgaDkZ8q+Bp00Ip8gBj395W5o3a9UZIVS4O5F23iJyUc7E3olPt3OdxaCJG+79dvcjfhUlcPNCXqF8TAIquFzeeZWDqwhtQ302NwVLiDzXzmrgjie3TZt7vn9MTRnEE42DoGSzkHh+QWgWtA==","k":["ud8zS/7umgEcyYd2wvTzxp9nbvuyrFB7Ql+NOlx81Jg=","TIAxTsMa2Y6tsuNei6iZm+OdvvIS0mCDGygM6KvI9zk="]},{"jour":94,"theme":"maths","question":"Combien font 1000 moins 906 ?","indice":"Le numero du jour.","c":"WUZQ3Xra60LZr82Gj8lNKZkwwPluAxlJsuLs8rPf10diYAztB2kRgAQ36yISgKBqTFvaTl2nlFKqqF5CIW1BsoWfNe/kCel3tklsx5DOsVNRmoXMpoTp8naJk4My9HU=","k":["tXiZYXkhrCP2xxMOAEdPoUj5F/xbP0tMiZ9d4k2Ilfk="]},{"jour":95,"theme":"nous","question":"Combien de jours restent apres celui-ci ?","indice":"128 moins 95.","c":"61oeElW0ozTlQLs4cKAsXDWJEpGZgFIw9c9qynHQR2J8C7MFMupGjprtVBugBup898J6MO/XNbJzEi3d148hBNEQokRXJ6X96NsazKVk+DEAgF2p3H3wU7p8JjeHdz/IzVKQOuhAJzjUoi8p8BIcDUC/ttJ0kHp5qRVHk8jfv9wb39we7gZWS9ifnvAW+enr20eWQwrvz+7pzliCDDkILuKDjhuWIw==","k":["R/IIUyWg+0ntfjASbic4xsAuReoIfTE1ICa4dPpw+jg=","m0ezHQ8Wk2c0seQwEL/3dpwcBQn5TG6g/noYkM0RjLM="]},{"jour":96,"theme":"logique","question":"Quel mot devient plus court quand on lui ajoute deux lettres ?","indice":"Ajoute -er a ce mot.","c":"6wF04CW8TyHFzG5shPI4CBS8rPNO8t/agyqGukGchAJae3uwwFYMHKsg7Eaijv84Jcv+02u3ErG08W8xAiW5XOlR8fWL44A+gkfJeLXywdwJAq7ekOt64G6s+2ZwQLbGUHUOAjiPEh7s","k":["nHP9SbR6D0N5d/cduzYG7QyZf3D4Ezo/awVe9OJCDNU=","rCJD+t53nXATh5YubEr0AZcTQf005E+xMkbTqFQUEpU="]},{"jour":97,"theme":"maths","question":"Quel est le nombre premier juste apres 89 ?","indice":"Le numero du jour.","c":"DdQ9JSKZsFIV+7b31FzyhiJv+Nem2WAYsrMTrE3YT0lHzDxXZbYUd1pmd2whnhKKwr7wO5NY0gmtfweY0r6bRxZCBZoefwRJm+xu7ArgRec1NENtguy1C9D9","k":["4mGAYqHMhBCcNsVupntgkzrwFkNMATUN5/4GAIVDxr0="]},{"jour":98,"theme":"enigme","question":"Plus je suis chaud, plus je suis frais. Qui suis-je ?","indice":"On le sort du four.","c":"W0LG5XO0geNfBdr8VEWlCtUBde4urJGSbbYxppihhBkwLMwCMbKq6NDOV+4GK8B0dVoVTPvbpJP2ORD5wlZLMqZr5Bhr/29NTpjKW6rEAwnEEDuUeC6bd6k+f0RkCGZ4lDIyLtNjZg70M0niSULL9JcD9cbsZWWnPo30CQ==","k":["1/vxATFSdEmjhqLceNfqshc91JIe80foiAirz42igVo=","QJZ9C8uaT3DIHZTqA9eV8Cn36jWwRTuQ8Jg8GZIwPhY=","IOSveGn648IcTkKUEqDWJxdICgkz46tLdA8a+3I/KV8=","1mH+GPh73fRBtQPO8fI55Cgc1Cf7iCTx7dN39xTUcKg="]},{"jour":99,"theme":"logique","question":"Marie a 4 filles et chacune a un frere. Combien Marie a-t-elle d enfants ?","indice":"Le frere est le meme pour toutes.","c":"/qeWZiNX+BCW6PoBvBfevQ8VQbGNKmqi41ZCUpzwUPSNmd2TSqswDZ0HHfS5QUr51T+FWTp/6vx4wF4yKuYVzK/XF+Y2m0Wc8jtzz0NwT5WS30nEpopibrqWg8XPbeHZTNu/82E=","k":["M7FcuI7N22TA7aRd7SZkGyGcD3LYTpRrlT5I3QhxSC8=","vetSw3CpzFaMqgWb+BcFDY6JZuy4kmcgxxSqBUFIjFE="]},{"jour":100,"theme":"culture","question":"Quel organe pompe le sang dans le corps ?","indice":"Il bat.","c":"la0IYkNhCsNRTN4rvFczxa8JabfVrNBQ8clcx8iPq06W4PnjV/3DCr1a+yiHZ7qjaMXZVfSI5qF6angz+1f+Mk3r1xOr1l66Zdm7R4XALR4LoMwp9iKOgaGhyRQxvYDtD2PRBADmFmV1pG+9dfPwQjNQ1tZqTPPdiFD83pQcaVlC4MWhRjxbAjmSTKJx5iYceVTIHlCYfKnDhohLX4xzSpHSFzwQ2PrGMHDy+z6NVLv3jb28umdA3uXnt4H8zLTaiSA9wuttIymniEVzweTM6GKTNYBDaewi5C/G+48Eg1Nk4lha+erQepvbrVeRk42r/fJn07qdz3lpj+IoHC09H08ZtEHUxOZDQbg9AJodqV9FW7Z2LgtxBpBUB2bMLZfpOseyc+P/m2wvvBLu2P2IzSv8UjNzJ3qrKT8tx2xafbjgZw==","k":["3LyXgUhWbquldX/1tpILe/eO+8ISIcdKSgzIlhhdx5g=","+eBDgW4vS3VxINXOc86Ck1S+l1HyNYF6RPPgYeFjIek=","Ei2nQA5Fa8OmFfT3Ylzg2fIFpHXYZgioLRG+eKqPLB4=","CMIGtUF6lPkzcy/+zH6fbX9wWtwvrPSxwvDhvnd/AvY="]},{"jour":101,"theme":"maths","question":"Combien font 20 x 5 plus 1 ?","indice":"Cent plus un.","c":"xHMzHXU8lvmRkKtZDSNwC6N9bmdAWvTMNv0j3tXEOzGjQx+abqhjRYOqCQjOIPq/mRxpTpptmulVcvYF7nWDktUZ/zs4AuZKKlpBd6YZ/n/mPGjoMkKiM8hyC4ZGO00dGaEIw7oedxPPPiEI81Y=","k":["KpP5w0oDMZu2BTbUZtWsJ96HDJZaW6O9fxp5Dwbu/d4="]},{"jour":102,"theme":"logique","question":"Quelle est la suite : 1, 2, 6, 24, 120, ... ?","indice":"Ce sont des factorielles.","c":"jMINOe8z9U1+8NC/4ZNSDLOegZBwn9f3TPoMWqT5pymq1fWbk9eCCwcGorKeWZsyzjGfE9BgbVVODssi4m2Ip5SwFhie/Rr6gSaP7PSuUgsn6wxkv/peLvGJCuV9kCQPe+yQnk6kLw==","k":["VqRYA9/Qc4wA1cV2n/TNm1EsNSVDwPoGp/aXt/hi48I="]},{"jour":103,"theme":"enigme","question":"Je vais partout avec toi et je copie chacun de tes gestes, mais je disparais dans le noir. Qui suis-je ?","indice":"Elle apparait au soleil.","c":"wGsi17uT+vfV2WmjnYi0QIFunZIS97UlxXJP53zH5jXLRhTxpVPdrYVgaX+GY3OMwxATgcB5NrzMlpCVR0W8SJHQ652td6AxmEV7pHQhKzzZ3+bIZnjt8YIq9EolUBq8uMl5eTJWM1mEDCP1iII3m3HOO40JmH2ijQ==","k":["nkWTrnLmno7i+VRBb+zbCYS1v/toZXwppt3vkTftPmI=","e+Sd449eE/EhXQK05wdqb1tR0KzT9Ned5h4iaFJoaZ8=","ITWzeBOQTtlj1MrI9KKwoBgJvFp1TAz0l5lDuPs/NVg=","6SFg7Hr8JIlZiGW+m6CjQ3TvNRyJ0nRdGkEkwzvcfdQ="]},{"jour":104,"theme":"maths","question":"Combien font 49 x 2 ?","indice":"50 fois 2 moins 2.","c":"2ziDyXm5/LRA2JHtYiZcoEVVfKCrxOoKmUXTtIFcF7+2tkVp2tTN/jdOUW0gitgprA93rJjtEP2sDGdGl6el8yk+hFVbI5gLKsa/kgRA6IkCEDYiyP63bi+/ZF4PoXaQdt7UM1C4jNoRii/IRyMA","k":["KBDkxTYwh6nhRORzOekGLmPzr26k9EiaTzr1NKdTyWI="]},{"jour":105,"theme":"culture","question":"Quelle est la vitesse de la lumiere en km par seconde, arrondie ?","indice":"Trois cent mille.","c":"JkxNVv0CXPghzeyL33BPtzgOnPvaaU7N63vBTm5QgTLWSVMkFEcymBubCNr58JJg9MIUaSGduei4t7+s554DCPMNXedwyNs8sOoixyTsCMXOnDm56BAVLOhyVpOVzLWS3l9916yZt8inoWFEssJS9yCoAv5dFee2+sT6Rt0LX2hQVMM=","k":["/5sIPnrarvB2pJdw1ZclbwySRk6vsCjebwXFc9a9/Nk=","QDyEKVWYZGg0Lxk94/SJOj7i4JsxxZbcXLMuvruR63A=","QKaXl+x/TZY60GR6UOXbwSL5BVQLsbXamoDd/IKTMmY="]},{"jour":106,"theme":"nous","question":"Quel pourcentage de 128 represente 106 environ ? (arrondi)","indice":"Un peu plus de 80 pourcent.","c":"yPcgTvMG66cOT41XiofmrHJjslGMHK8MKswH051PlcZnhlI5P1dPPcyKHY0YifqO2t33K/REapTxGlK8wRgvTVmLVlNInMXgB65wP9I+s+v7fuK81QQejkrbQpyLIWom5/t+3HJR2ZKUCP9l4Yz1Sm0aqPShWH5MEKsoM3Por35FTPIy7hVQziaXoAkQJi0Ubgy9lQ==","k":["eRIAz7F1f7kHzip2woYrQVsIb1mSwbbPa1ymckxwb5I=","7awZkCd1lFVE9HwLKAWnEU7ygfbct4BLE+Iiy8mBCbo="]},{"jour":107,"theme":"maths","question":"Combien font 101 moins 44 ?","indice":"Simple soustraction.","c":"eu3B9kNO31Urw/x7E1oZzZGZ7DfjX6DEVvHi/lXoEVxL0We+z6+h7Pqo3pru5qrYx9h9n+4nXeZebopMaKF0Yay3jw7zqxc8A/IuYL+8vi/N1HyWUy6gN2xBD/oAvQEcp1OnT3pmfjCQxXQ=","k":["rOW6qa+Bi7IaTFP8/XGWr0dpEOt8PJ1NbCJxUnObInI="]},{"jour":108,"theme":"logique","question":"Trois interrupteurs, une ampoule dans une autre piece, une seule visite possible. Que doit-on utiliser en plus de la lumiere ?","indice":"Une ampoule allumee longtemps devient...","c":"z1ksVsyTiS/T4O/E14oV7ZTrzqwLK93tlYXePVtn3p2gdu7x7yLnCnCJ6spUx6O8Tv1Ep6ZCaUOL4EQ+tiAHAWACkfYpGpwjdjXKvUZ0oVigeNSJfrjHlTr1w79mPt8+/Wfy/cI=","k":["7qjkopkyOy7899IjD3iNywSebxuAfNtOMuCnEypJBXA=","mzWuSmPczzVrs4FFKjem5Bb3l/CNy03oIihGc4fce4A=","uMvFPxM/kSR5NOi1TqILobzytmaIFtEYNaRfa/GOVqM=","bxEh17QHu5LPYEc4UfyHTFCaAZUpdoHdtmZMeL9H7xs=","D1vamxbmacxuUxbQnjg2w9iFOqRH7AdCngimR4elB7c="]},{"jour":109,"theme":"culture","question":"Combien de lettres dans l alphabet francais ?","indice":"Entre 25 et 27.","c":"jrDwugrjKr6ECj6CdZ9fOLFap3i23lGPsQnYFvELbgUkXZoP+CyA80LN/Dr0tEBLvZf5jRhvq5WIxnZcbLsV9pQ4MKe+usUU9aaAgIGit+mgI5RtVFdaao1D106u3WWlRCygrqfi74ux9T+N41NrDDK53rncU0q6ZTIH1NeN","k":["O3x8vegjyHjOL4W9LXOOuWDqC2rKhHKiqvpNoE17k4k=","2vzjlh1ubu2zCKZyXL6L9yQIlWx0o69Q9QIuW8LNRtY="]},{"jour":110,"theme":"maths","question":"Quelle est la somme des angles d un triangle en degres ?","indice":"Un demi-tour.","c":"2Ojja60M4Hp5cLmR/qwJ8YgkD4k5U5kvujVxVoID5fkwbKHcL1k+n1Mzmh+2o3eXL72OU5hr3VFUPQpZDMXq2X4Ccj15WtPSuQ==","k":["0p6BxVMSVTjduzrUFT50Pymal++R70WIka9V6ne0iPg=","+w1WA9u783dNWxDw/QGgVBhZ57x0yp+wrtq6X50XD3E="]},{"jour":111,"theme":"enigme","question":"Qu est-ce qui a un cou mais pas de tete ?","indice":"On la debouche.","c":"nb3PSjID0C/8XavREUWK1VIq3fY7iRQVuy5HAjga1tD3M4KEhTwcMydlnQb8pfgVgsCfhEydw9a9IKRSNjketEswjlDNBqhq2VbM1YOmFlCK1jH2F5A7GUnDxLE8kipZAE2T","k":["AWijji8Ex2FctwgUeA73w+RVu8/bf248Bb3iN5PDmGw=","JVmrEUXjHlXLNYiMYXP4UDn1Pvd2pk6adhX52nMWpd0=","31sW9uQDXVHHtmvS9V1mMuWFojt3t8ipzH0t4/ih+t8="]},{"jour":112,"theme":"culture","question":"Combien de jours dure une annee bissextile ?","indice":"Un de plus que d habitude.","c":"6K6ugdjcQsqURY2pj7t8mfRtEnB4PQMGkxXHvV9B0D9XqSKEOSHFIJDU5brqbUiKUrW2mOXpDmVrU4FTYeUX9i3xNokgRVNAZI5gGYPt94exbdtKo5QkrVhf4IF666waJHsIqi9FncHhHWgOy7/u+/Yru7uQmk/MvP2AAkZXccvooz+2nw==","k":["WvBWP9sSswXBf1HO6Uc4Vzv0p+EDKPnceuESqDls3ZM="]},{"jour":113,"theme":"maths","question":"Combien font 15 x 6 ?","indice":"Un angle droit en degres.","c":"Q/P/DHcYB8wCaR6XQlHXuNRQ+ScIMyiO1txWSG+Zaqv7+3C2Tbk0eSfQnPmu+7sLJfIF4X/nyX/P/4Qed15fB1W1nLjBCK8lqLN/DA/nfjJtbfeXfkpL","k":["MOwN25/cXgrOnzCBwczMIoYNeS5QgQ+s1quhyKjXVSA="]},{"jour":114,"theme":"logique","question":"Je suis un nombre. Si tu me multiplies par moi-meme et que tu ajoutes 1, tu obtiens 50. Qui suis-je ?","indice":"49 plus 1.","c":"SRl8dgCZ5ezdJYBL/OGxRFMftNDfJkiLCi0S9oXMO4i9vkpR+bmRCh/mAZnWmxReWgfoP/dIE0YaWqouWoN88c7xYhnXZBA7J0l/IqB/rUCAbhw46IAp","k":["HBzHxlbSQiOTFFFI5jpmZlrhp1UMqQyqjEUzCGj62q8=","yrGHbmp1vTT3w5+po+xzonPR0QZiBlNAlFLNfgNIPtM="]},{"jour":115,"theme":"culture","question":"Quel pays a pour capitale Lisbonne ?","indice":"Il borde l Atlantique a l ouest de l Espagne.","c":"KOJYwTgSOzSK1ui0Qko3ooDA9NHE6nS3S5WZY1sZNUaUbFO2YCMeOebCCjJLL2Q4m+7flPUCPiDVCOhBTCZfCTJnhCu4QfWVzD7o9TB1YJD45utGU+7TNs3YGXg2OjIC3MvQvvcNzVAkgGMZaQ==","k":["rYfWoI8pN5G1zKVcj0U7D6rEuyxyqkLHRTA0w6v5o2M=","JKiHa0mVFMNAgftCA+ayEwV7B+Wd2dYB8eW+vsvb7ko="]},{"jour":116,"theme":"maths","question":"Combien font 128 moins 116 ?","indice":"Le nombre de jours restants.","c":"VJUNc4oVs1rpCC3u9lPoTqSPCGoeijL4PVvUcXIOawsTyQs/kiee0rYsmpEeg7HahYc5tiUcwewePCOJ0R+ScceY9J4owShfnPoH+U6T2SulPKk+7vxJNPqY+H+CqVf8O54oTqbs77pebTLQAV4vlwDI6fVmTjkAnQy1ybd+ba3C7+Hk","k":["K3Buh/rSfPAZWlICylXj83+jFp16goX0ZizMebiEjhM=","YSYaR19We6gGotA6botjsZS6tRUZIUL27H5eRWKgz9Q="]},{"jour":117,"theme":"nous","question":"Combien de mots restera-t-il apres celui-ci ?","indice":"128 moins 117.","c":"oj7VwnkyRz+yqhoo6bGym3NTDd775cWEkNYusfO+O/PljNREtrNEimzPkgvz6dcW/UHlGUACWMDcf53Szus0bSrvovdl5bmSU1dOjUbvpcTMXU8hm2INsWuGOXB48mDQFZji4ahr3ysomTm0zGo4G90bSLR0BlwDkJY6gt1Y","k":["9G3tNhVp/gT6Cpq3zNZHJ/lPEHjU8kfFPlFP49wgiU0=","idXeVCv5ClKEKDeakx6d+Xjtn6Vz481r7nV2Fy20FSo="]},{"jour":118,"theme":"logique","question":"Quel est le seul chiffre qui s ecrit avec autant de lettres que sa valeur en francais ?","indice":"Quatre lettres.","c":"NKNX2UVS5qwhvrgYWJ4CGNQKoYsAUj/Qj8jAwzybZKhRKsCS29pUhpf6ZF6ul4zzqNbi+xAXRAmJXwUZsju3+Sfx5l/EQoyIGwI2AvGqvioQ0HrlsFIEbpZ/h9SjDvks53FhNSc=","k":["aaBhrLiLwqrGTKZrFo3jI9d6uqDHSdvsjuH3k67ky7E=","oDAxPF1rQaoBbFvrQvaCfPhMuiFhjuxiy73X7sed56c="]},{"jour":119,"theme":"maths","question":"Combien font 7 x 17 ?","indice":"Le numero du jour.","c":"QxftOZ/lYeZI3vUYr0yLWYZr9/K6hmCRnA1AWs8iF8hmj3muiD3X65GrArK6LpOZgLnkh1ii43iQX6XwAasltw8yrjk9WtCgoog/4N2JacQeue+S/25CU8jdl8P00PrZ","k":["SpsfTrujs4F1XnsZkKujAozyS23CPbZZdcRZwE5IOU8="]},{"jour":120,"theme":"enigme","question":"Je nais grand et je meurs petit. Qui suis-je ?","indice":"On l allume pour un anniversaire.","c":"JvIrHX/gxHidFGeJXXMmWa8BTgQTOe9xwwD6DqT7W9yJgjxQcoCLnvUnpXm23qBNooQ3LgAcwK3jsRMt9mOM0g34p9NcOsyIlgj9o03c//xETIeknGS4gWs=","k":["zDgGsu2XlnJWzo3ff+GL5W0YICJrdXUfOrXxm5sOPsg=","BoA55a5TCnlaQKIRIuUw/k+3JX7ug89GEy67yLxpf3o=","WKRRvYfcPb4CALCYGmsFLoNhYIs54Rrfs2gnePptqTY=","0AiqnkELdJqCVZaU8TY9VaFdqDmlaVKSoEF9UPCKHPw=","mzPCkE7bHMgWnRxVb6bszpYoUpie5262jHs5prbNgAo="]},{"jour":121,"theme":"culture","question":"Combien de faces a un de classique ?","indice":"De 1 a 6.","c":"OviPYK/xsfAHZwESFNnmrSdrmwzhoxoddamh/P1e1H5FD46hp6i546QlSPznkdNdMVbYQTgbBpVBRPfsWAwmjdw9dW8o74holG9keQtucpxcUejRBYiyppozOwR1uM3vW9n22QGBg+8XOg==","k":["09KdcqpG2aOjol4E++R6Cz8Ue9Jen4XlbTXOiIV2+8w=","w7TcmHIn2X5P1vFq5m0TO3vNexjZj/orsgiFqT7/TCc="]},{"jour":122,"theme":"maths","question":"Combien font 61 x 2 ?","indice":"Le numero du jour.","c":"Exxfw+JAJttIl1Pf3DkwmGm5wC9jcRYyVbBztrAvsdFDkUnmmXILMGNs0Vha5m+sSkfgJKSYA9Z4VZVCC5+zDnlMiZst1c+a9QyIWYDIn1EhOOXX+5A1shW+FgXDXHG+dC0xQqx6CbKF2/Q7BhzpUoyGpSFzNQ==","k":["g8x6/v9VEUEcutMzBJVpTKm6XOMH1x3711aZZnOoWjc="]},{"jour":123,"theme":"enigme","question":"On me met sur la table, on me coupe, mais on ne me mange jamais. Qui suis-je ?","indice":"On les bat avant de jouer.","c":"bbr0T3QeAnOCLb5RolcKGvms7uzTJ5RRyAWgmu2/YGUG+/AYg7jJX6I4z7Z2b5rCcF/MHfTo+Cequ6BEuCnbz3SkRJaZDp1oSi40wjD9bZ2tiHvXR7fANxl3rcceE8qo3DtFX/l8iyVxE6tWe4d6wKVeR/NFbVq5DtFNECSUUCshf4brQvAOu+aCgw==","k":["YyzU7AGxmUE03PxTHU5kVf/9t8y8DJj7ESfYPJ0+ElY=","sDhlMJb7TWl3s4AFZeQuD8DDzroXX3LnFHzYQS7Wc0w=","PQcc3kBQ6rsygQm9H8lTygkufOaBP8+qogMFRMb3KNM=","bIn4ynfd2Yb+AVX/M5hAWJTHn3i9iXVsZglMI4xpnUA=","JmPHYGF5HyE9dcV351M20Lw1F89mRN8Ze0T4b00nkQE=","zgzNrGL8/S6tBFnVm5tkKTMxilWGkRRSwiYc0LJ6FS4="]},{"jour":124,"theme":"logique","question":"Qu est-ce qui monte toujours et ne redescend jamais ?","indice":"On le fete chaque annee.","c":"b/AJwihGIkWQMdyYNOdEsmrORwW+V1OWlWEzpHzgrgv7CcPUEh+Asa9zkyVKw1PJwDYGOcuExW0x8ovig6y4Qfj8QGWzSa/t4yfhvtCVkcUabmmIYQ3qu3AQWUNUd8t99g==","k":["jeOFhaIXwx66TV3jh8fcFm/cd8G6sKVT1PxI3guZsjo=","E2NaTf37r7yh8mZZzfu7IkOCCvbKuj0hNqBPcrXEJKY=","2Q9ZQvU42xx+KsqhTbNl2lYGQpUjLfsiHthR/qXLi90=","R2Sr9IZWRonE0E9MypNAhu8L10aB6qnkGQkgfcWBpDw="]},{"jour":125,"theme":"nous","question":"Combien de jours reste-t-il apres celui-ci ?","indice":"Presque rien.","c":"CMsna6OivVJuAOpiUTKfV+kX8RnHNiArBRstPq5F6mxV13oYkIhwFjCRIJXunz66wFtSKqulmE9n+sfVACd/D3RQgPPNGa+XZHO0FUlT3YoErpHJBvxXDqOTbKfkUGh952YG3dVrflDWvGI0DSY=","k":["IuWJQtbChpmfGi5T2y9Tat8SIXkFB/4gjSg0ujkSrM0=","YaHfggPVYyIdCed5uTIAhrM/Uo7U0deTuR7Gs+gMXAQ="]},{"jour":126,"theme":"maths","question":"Combien font 63 x 2 ?","indice":"Soixante-trois fois deux.","c":"BxeR6PW8xr6VUwBToqk1fUVIWYv5xpC9nKxuGGZd0XMu5a2WAsrKR2nIC6xZY5lus6elQXqAJYVEdHl7QMMYlxhlESrbC58oNWubBz2rWr2u6elTa3mTF96TEvTocjbzKZzAWLjakw==","k":["xVxvUPdSTE+W8WKc2aK6Bsj9OsCmISCGtWVlKSTA/5Q="]},{"jour":127,"theme":"enigme","question":"Je viens toujours mais je n arrive jamais. Qui suis-je ?","indice":"Il est toujours a un jour d ici.","c":"p82ab9+fSwY3frn3AxfjJLAFsp3fZ/1raTvfSxQzPEaQgx+WmLIBiKpWuXpjCJ9HXejQURa/EgnjYfsPRH91oOG8+7vOHYAdF/CyaTBqNvPyNfoB0k4xJd/51DVqlFI5Lj4=","k":["5EndNfXaFqiuhhWw9gptixp5Lj3m1PmLFqXPVF5F97A=","KmBw9XPVmcnpW53SiD7Mz14hOy0k7YWQaXItUnbiPJA="]},{"jour":128,"theme":"nous","question":"Combien de jours as-tu tenu ?","indice":"Le dernier chiffre de l histoire.","c":"AKWc+rS+ci5OMBKwJ+R3U2BUkTE8iwOpHUTUxbdVm0kUwRxDmk0mrgQAywFErK1j1fztXA4IEEqsaYX6dEnK+ZXhdpCSjI4sF9kjpK1c91eMOsQjkUfABecMmcEQ4bR1AqRI0FG5eK+b2KafnG3n7DD1zAl3oOL0RlAfpE4icM139GscgtKvb2yH0s5hExhMiFZeTu5zzGHVpg9xW58KcvGyQD/OGTVfiZO68d+QZ7f6GiRJBWUIxOMRjkeIgcmrpyoHJOVOpdGrTauFAoCCUBIfypfyT4ve5Kc8BdeqA85PDUWS72aUAYqDhBOG3IAM4PmKQThTn/gX4Fi8OhtL1Lpl8c2ANrHP/26ZKdB/GwCHLtloseQqFFbOTLnAzt/5lF2snLEYNmqk5x6+S3bBgPeD27MqmQWwwXmnFeIpoMANkQ==","k":["g8hi4lf/J7BiUP0Sz11ODgaRVF0I3qLItIet+vXDYTU=","c8AnFQCs2jn+kqIzxtZzuSiSuM5sMF6cZrygnKZOSIE="]}]};
+
+  /* ---------- Chiffrement (miroir exact de build.mjs) ---------- */
+
+  function normaliser(s) {
+    return String(s)
+      .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase()
+      .replace(/[^a-z0-9]/g, "");
+  }
+
+  function fnv1a(str) {
+    var h = 0x811c9dc5;
+    for (var i = 0; i < str.length; i++) {
+      h ^= str.charCodeAt(i);
+      h = (h + ((h << 1) + (h << 4) + (h << 7) + (h << 8) + (h << 24))) >>> 0;
+    }
+    return h >>> 0;
+  }
+
+  function flux(graine, n) {
+    var x = graine >>> 0 || 0x9e3779b9;
+    var out = new Uint8Array(n);
+    for (var i = 0; i < n; i++) {
+      x ^= x << 13; x >>>= 0;
+      x ^= x >>> 17;
+      x ^= x << 5;  x >>>= 0;
+      out[i] = (x >>> 24) & 0xff;
+    }
+    return out;
+  }
+
+  function b64versOctets(b64) {
+    var bin = atob(b64);
+    var out = new Uint8Array(bin.length);
+    for (var i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
+    return out;
+  }
+
+  function ouvrir(jour, reponse) {
+    var n = normaliser(reponse);
+    if (!n) return null;
+    var empreinte = flux(fnv1a("rep:" + n), 32);
+    var chiffre = b64versOctets(jour.c);
+    for (var k = 0; k < jour.k.length; k++) {
+      var enveloppe = b64versOctets(jour.k[k]);
+      var cle = new Uint8Array(32);
+      for (var i = 0; i < 32; i++) cle[i] = enveloppe[i] ^ empreinte[i];
+      var graine = 0;
+      for (var j = 0; j < 32; j++) graine = ((graine * 33) ^ cle[j]) >>> 0;
+      var ks = flux(graine, chiffre.length);
+      var clair = new Uint8Array(chiffre.length);
+      for (var m = 0; m < chiffre.length; m++) clair[m] = chiffre[m] ^ ks[m];
+      if (clair[0] === 0x4c && clair[1] === 0x56) {
+        return new TextDecoder().decode(clair.subarray(2));
+      }
+    }
+    return null;
+  }
+
+  /* ---------- Dates ---------- */
+
+  function ajouterJours(iso, n) {
+    var p = iso.split("-");
+    var d = new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2]));
+    d.setDate(d.getDate() + n);
+    return d;
+  }
+
+  function minuit(d) { return new Date(d.getFullYear(), d.getMonth(), d.getDate()); }
+
+  function jourCourant() {
+    var debut = ajouterJours(DATA.debut, 0);
+    var ecart = Math.floor((minuit(new Date()) - minuit(debut)) / 86400000);
+    return ecart + 1; // jour 1 = jour du debut
+  }
+
+  function dateDuJour(n) {
+    return ajouterJours(DATA.debut, n - 1).toLocaleDateString("fr-FR", {
+      weekday: "long", day: "numeric", month: "long"
+    });
+  }
+
+  /* ---------- Memoire ---------- */
+
+  var CLE = "cent-vingt-nuits.v1";
+  var memoire = (function () {
+    try { return JSON.parse(localStorage.getItem(CLE)) || {}; } catch (e) { return {}; }
+  })();
+
+  function sauver() {
+    try { localStorage.setItem(CLE, JSON.stringify(memoire)); } catch (e) {}
+  }
+
+  function estOuvert(n) { return Object.prototype.hasOwnProperty.call(memoire, n); }
+
+  /* ---------- Etat ---------- */
+
+  var TOTAL = DATA.total;
+  var courant = jourCourant();
+  var affiche = Math.min(Math.max(courant, 1), TOTAL);
+  var essais = 0;
+
+  var THEMES = { maths: "Calcul", logique: "Logique", enigme: "Enigme", culture: "Culture", nous: "Nous deux" };
+
+  function jourParNumero(n) {
+    for (var i = 0; i < DATA.jours.length; i++) if (DATA.jours[i].jour === n) return DATA.jours[i];
+    return null;
+  }
+
+  function etatDe(n) {
+    if (n > courant) return "verrou";
+    if (estOuvert(n)) return "ouvert";
+    if (n === courant) return "aujourdhui";
+    return "dispo";
+  }
+
+  /* ---------- Rendu du calendrier ---------- */
+
+  var MOIS_NOMS = ["janvier", "fevrier", "mars", "avril", "mai", "juin",
+                   "juillet", "aout", "septembre", "octobre", "novembre", "decembre"];
+  var JOURS_COURTS = ["L", "M", "M", "J", "V", "S", "D"];
+
+  function dateDe(n) { return ajouterJours(DATA.debut, n - 1); }
+
+  function numeroDe(an, mois, d) {
+    return Math.round((new Date(an, mois, d) - minuit(dateDe(1))) / 86400000) + 1;
+  }
+
+  function courtDate(d) { return d.getDate() + " " + MOIS_NOMS[d.getMonth()]; }
+
+  function blocMois(an, mois) {
+    var bloc = elem("section", "mois");
+    bloc.appendChild(elem("h2", "mois-titre", MOIS_NOMS[mois] + " " + an));
+    var g = elem("div", "grille");
+    for (var i = 0; i < 7; i++) {
+      var jn = elem("div", "jour-nom", JOURS_COURTS[i]);
+      jn.setAttribute("aria-hidden", "true");
+      g.appendChild(jn);
+    }
+    var decalage = (new Date(an, mois, 1).getDay() + 6) % 7;
+    for (var b = 0; b < decalage; b++) g.appendChild(elem("div", "case"));
+    var nb = new Date(an, mois + 1, 0).getDate();
+    for (var d = 1; d <= nb; d++) {
+      var n = numeroDe(an, mois, d);
+      if (n < 1 || n > TOTAL) { g.appendChild(elem("div", "case hors", String(d))); continue; }
+      var etat = etatDe(n);
+      var cell = elem("button", "case" + (n === TOTAL ? " retrouvailles" : ""), String(d));
+      cell.type = "button";
+      cell.dataset.etat = etat;
+      cell.dataset.jour = String(n);
+      if (n === affiche) cell.setAttribute("aria-current", "page");
+      if (etat === "verrou") cell.disabled = true;
+      var suffixe = n === TOTAL ? ", les retrouvailles"
+        : etat === "verrou" ? ", pas encore disponible"
+        : etat === "ouvert" ? ", deja ouvert" : ", a ouvrir";
+      cell.setAttribute("aria-label", "Jour " + n + ", " + d + " " + MOIS_NOMS[mois] + suffixe);
+      g.appendChild(cell);
+    }
+    bloc.appendChild(g);
+    return bloc;
+  }
+
+  function dessinerCalendrier() {
+    var hote = document.getElementById("calendrier");
+    hote.textContent = "";
+    var d1 = dateDe(1), dN = dateDe(TOTAL);
+    var an = d1.getFullYear(), mois = d1.getMonth();
+    var anF = dN.getFullYear(), moisF = dN.getMonth();
+    while (an < anF || (an === anF && mois <= moisF)) {
+      hote.appendChild(blocMois(an, mois));
+      mois++;
+      if (mois > 11) { mois = 0; an++; }
+    }
+  }
+
+  /* ---------- Rendu de la carte ---------- */
+
+  function elem(tag, cls, txt) {
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (txt !== undefined) e.textContent = txt;
+    return e;
+  }
+
+  function dessinerCarte(anime) {
+    var zone = document.getElementById("carte-zone");
+    zone.textContent = "";
+
+    if (courant < 1) {
+      var att = elem("div", "carte");
+      att.appendChild(elem("p", "vide", "Le premier mot s ouvre le " + dateDuJour(1) + ". Reviens ce jour-la."));
+      zone.appendChild(att);
+      return;
+    }
+
+    var j = jourParNumero(affiche);
+    if (!j) return;
+
+    var carte = elem("div", "carte");
+
+    var entete = elem("div", "carte-entete");
+    var num = elem("div", "jour-num");
+    num.appendChild(document.createTextNode(String(affiche)));
+    var sur = elem("span", null, " / " + TOTAL);
+    num.appendChild(sur);
+    entete.appendChild(num);
+    var droite = elem("div", null);
+    droite.style.display = "flex";
+    droite.style.alignItems = "center";
+    droite.style.gap = "0.75rem";
+    droite.style.flexWrap = "wrap";
+    var dateTxt = elem("span", "aide", dateDuJour(affiche));
+    droite.appendChild(dateTxt);
+    droite.appendChild(elem("span", "etiquette", THEMES[j.theme] || "Question"));
+    entete.appendChild(droite);
+    carte.appendChild(entete);
+
+    if (estOuvert(affiche)) {
+      var lettre = elem("div", "lettre");
+      var sceau = elem("div", "sceau");
+      var coeur = elem("i", null, "♥");
+      sceau.appendChild(coeur);
+      sceau.appendChild(document.createTextNode("Le mot du jour"));
+      lettre.appendChild(sceau);
+      var p = elem("p", "mot", memoire[affiche]);
+      lettre.appendChild(p);
+      var sig = elem("p", "signature", "— " + (DATA.signature || ""));
+      lettre.appendChild(sig);
+      if (anime) {
+        sceau.classList.add("apparait");
+        p.classList.add("apparait-2");
+        sig.classList.add("apparait-3");
+      }
+      carte.appendChild(lettre);
+    } else {
+      var q = elem("h2", "question", j.question);
+      carte.appendChild(q);
+
+      var form = document.createElement("form");
+      form.className = "champ";
+      var input = document.createElement("input");
+      input.type = "text";
+      input.autocomplete = "off";
+      input.placeholder = "Ta reponse";
+      input.setAttribute("aria-label", "Ta reponse");
+      var btn = elem("button", "btn", "Ouvrir");
+      btn.type = "submit";
+      form.appendChild(input);
+      form.appendChild(btn);
+      carte.appendChild(form);
+
+      var msg = elem("div", null);
+      msg.style.display = "flex";
+      msg.style.flexDirection = "column";
+      msg.style.gap = "0.75rem";
+      carte.appendChild(msg);
+
+      var bas = elem("div", "barre-bas");
+      var btnIndice = elem("button", "btn btn-fantome", "Un indice");
+      btnIndice.type = "button";
+      bas.appendChild(btnIndice);
+      var compte = elem("span", "aide", estOuvert(affiche) ? "" : (affiche === courant ? "Question du jour" : "Jour en retard, tu peux le rattraper"));
+      bas.appendChild(compte);
+      carte.appendChild(bas);
+
+      btnIndice.addEventListener("click", function () {
+        if (msg.querySelector(".indice")) return;
+        var ind = elem("p", "indice", j.indice);
+        msg.appendChild(ind);
+      });
+
+      form.addEventListener("submit", function (ev) {
+        ev.preventDefault();
+        var val = input.value;
+        if (!normaliser(val)) return;
+        var clair = ouvrir(j, val);
+        if (clair) {
+          memoire[affiche] = clair;
+          sauver();
+          essais = 0;
+          dessinerCalendrier();
+          dessinerCarte(true);
+          majCompteur();
+        } else {
+          essais++;
+          var vieille = msg.querySelector(".erreur");
+          if (vieille) vieille.remove();
+          var textes = ["Pas tout a fait. Reessaie.", "Toujours pas. Tu veux un indice ?", "Non plus. L indice est juste en dessous."];
+          msg.insertBefore(elem("p", "erreur", textes[Math.min(essais - 1, 2)]), msg.firstChild);
+          input.classList.remove("secousse");
+          void input.offsetWidth;
+          input.classList.add("secousse");
+          if (essais >= 2 && !msg.querySelector(".indice")) {
+            msg.appendChild(elem("p", "indice", j.indice));
+          }
+          input.select();
+        }
+      });
+
+      setTimeout(function () { input.focus({ preventScroll: true }); }, 60);
+    }
+
+    if (affiche !== courant && courant >= 1 && courant <= TOTAL) {
+      var retour = elem("button", "retour", "Revenir au jour d aujourd hui");
+      retour.type = "button";
+      retour.addEventListener("click", function () {
+        affiche = Math.min(courant, TOTAL);
+        essais = 0;
+        dessinerCalendrier();
+        dessinerCarte(false);
+      });
+      carte.appendChild(retour);
+    }
+
+    zone.appendChild(carte);
+  }
+
+  /* ---------- Compteur & pied ---------- */
+
+  function majCompteur() {
+    var ouverts = 0;
+    for (var i = 1; i <= TOTAL; i++) if (estOuvert(i)) ouverts++;
+    var restants = Math.max(0, TOTAL - Math.min(Math.max(courant, 0), TOTAL));
+    var el = document.getElementById("compteur");
+    el.textContent = "";
+    if (courant < 1) {
+      el.appendChild(document.createTextNode("Le compte a rebours n a pas encore commence"));
+    } else if (courant > TOTAL) {
+      el.appendChild(document.createTextNode("C est fini. "));
+      var b0 = document.createElement("b");
+      b0.textContent = ouverts + " mots";
+      el.appendChild(b0);
+      el.appendChild(document.createTextNode(" ouverts."));
+    } else {
+      var b1 = document.createElement("b");
+      b1.textContent = "Jour " + courant;
+      el.appendChild(b1);
+      el.appendChild(document.createTextNode(" sur " + TOTAL + " · "));
+      var b2 = document.createElement("b");
+      b2.textContent = String(restants);
+      el.appendChild(b2);
+      el.appendChild(document.createTextNode(" restants · " + ouverts + " ouverts"));
+    }
+    document.getElementById("pied").textContent = "Une case de plus chaque jour, jusqu au " + courtDate(dateDe(TOTAL)) + ".";
+  }
+
+  /* ---------- Fond etoile ---------- */
+
+  function fondEtoile() {
+    var c = document.getElementById("ciel-fond");
+    var ctx = c.getContext("2d");
+    var reduit = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var etoiles = [];
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+    function semer() {
+      c.width = c.clientWidth * dpr;
+      c.height = c.clientHeight * dpr;
+      var n = Math.round((c.clientWidth * c.clientHeight) / 9000);
+      etoiles = [];
+      for (var i = 0; i < n; i++) {
+        etoiles.push({
+          x: Math.random() * c.width,
+          y: Math.random() * c.height,
+          r: (Math.random() * 1.1 + 0.3) * dpr,
+          a: Math.random() * 0.5 + 0.12,
+          v: (Math.random() * 0.5 + 0.15) * dpr * 0.04,
+          p: Math.random() * Math.PI * 2
+        });
+      }
+    }
+
+    function peindre(t) {
+      ctx.clearRect(0, 0, c.width, c.height);
+      for (var i = 0; i < etoiles.length; i++) {
+        var e = etoiles[i];
+        var scin = reduit ? 1 : 0.65 + 0.35 * Math.sin(t / 1400 + e.p);
+        ctx.beginPath();
+        ctx.arc(e.x, e.y, e.r, 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(227, 200, 150, " + (e.a * scin).toFixed(3) + ")";
+        ctx.fill();
+        if (!reduit) {
+          e.y -= e.v;
+          if (e.y < -2) { e.y = c.height + 2; e.x = Math.random() * c.width; }
+        }
+      }
+      if (!reduit) requestAnimationFrame(peindre);
+    }
+
+    semer();
+    requestAnimationFrame(peindre);
+    var minuteur;
+    window.addEventListener("resize", function () {
+      clearTimeout(minuteur);
+      minuteur = setTimeout(function () { semer(); if (reduit) peindre(0); }, 200);
+    });
+  }
+
+  /* ---------- Demarrage ---------- */
+
+  (function entete() {
+    var d1 = dateDe(1), dF = dateDe(TOTAL);
+    document.getElementById("surtitre").textContent =
+      courtDate(d1) + " — " + courtDate(dF) + " · " + TOTAL + " jours";
+    var h1 = document.getElementById("titre-page");
+    h1.textContent = "Jusqu au " + courtDate(dF) + ",";
+    h1.appendChild(document.createElement("br"));
+    var em = document.createElement("em");
+    em.textContent = DATA.prenom;
+    h1.appendChild(em);
+    document.title = "Jusqu au " + courtDate(dF);
+  })();
+
+  document.getElementById("calendrier").addEventListener("click", function (ev) {
+    var b = ev.target.closest("button.case");
+    if (!b || b.disabled) return;
+    affiche = Number(b.dataset.jour);
+    essais = 0;
+    dessinerCalendrier();
+    dessinerCarte(false);
+    document.getElementById("carte-zone").scrollIntoView({ behavior: "smooth", block: "center" });
+  });
+
+  dessinerCalendrier();
+  dessinerCarte(false);
+  majCompteur();
+  fondEtoile();
+})();
+</script>
+</body>
+</html>
