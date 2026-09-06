@@ -557,7 +557,9 @@
 
   /* ---------- Memoire ---------- */
 
-  var CLE = "cent-vingt-nuits.v1";
+  // v2 : on garde la reponse donnee, pas le mot. Le mot est redechiffre a
+  // chaque affichage, donc une correction du contenu se voit tout de suite.
+  var CLE = "cent-vingt-nuits.v2";
   var memoire = (function () {
     try { return JSON.parse(localStorage.getItem(CLE)) || {}; } catch (e) { return {}; }
   })();
@@ -567,6 +569,12 @@
   }
 
   function estOuvert(n) { return Object.prototype.hasOwnProperty.call(memoire, n); }
+
+  // Le texte du jour n, redechiffre depuis la reponse memorisee.
+  function motMemorise(n) {
+    var j = jourParNumero(n);
+    return j ? ouvrir(j, memoire[n]) : null;
+  }
 
   /* ---------- Etat ---------- */
 
@@ -691,14 +699,22 @@
     entete.appendChild(droite);
     carte.appendChild(entete);
 
-    if (estOuvert(affiche)) {
+    // Si la reponse memorisee n ouvre plus rien (les reponses acceptees ont
+    // change depuis), on oublie le jour plutot que d afficher du vide.
+    var texteDuJour = estOuvert(affiche) ? motMemorise(affiche) : null;
+    if (estOuvert(affiche) && texteDuJour === null) {
+      delete memoire[affiche];
+      sauver();
+    }
+
+    if (texteDuJour !== null) {
       var lettre = elem("div", "lettre");
       var sceau = elem("div", "sceau");
       var coeur = elem("i", null, "♥");
       sceau.appendChild(coeur);
       sceau.appendChild(document.createTextNode("Le mot du jour"));
       lettre.appendChild(sceau);
-      var p = elem("p", "mot", memoire[affiche]);
+      var p = elem("p", "mot", texteDuJour);
       lettre.appendChild(p);
       var sig = elem("p", "signature", "— " + (DATA.signature || ""));
       lettre.appendChild(sig);
@@ -751,7 +767,7 @@
         if (!normaliser(val)) return;
         var clair = ouvrir(j, val);
         if (clair) {
-          memoire[affiche] = clair;
+          memoire[affiche] = normaliser(val);
           sauver();
           essais = 0;
           dessinerCalendrier();
