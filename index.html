@@ -8,9 +8,9 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="Jusqu'au 27 décembre">
+<meta name="apple-mobile-web-app-title" content="Jusqu’au 27 décembre">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23FFFFFF'/%3E%3Cpath d='M16 26C6 19 4 12.5 9 9.5c3.4-2 6 .5 7 2 1-1.5 3.6-4 7-2 5 3 3 9.5-7 16.5z' fill='%23D22B25'/%3E%3C/svg%3E">
-<title>Jusqu'au 27 décembre</title>
+<title>Jusqu’au 27 décembre</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600&family=Karla:wght@400;500;700&family=Spectral:ital,wght@0,300;0,400;1,300&display=swap">
@@ -455,10 +455,10 @@
   <section class="calendrier-bloc" aria-label="Le calendrier">
     <div class="mois-grille" id="calendrier"></div>
     <div class="legende">
-      <span><i class="puce aujourdhui"></i> aujourd hui</span>
-      <span><i class="puce ouvert"></i> deja ouvert</span>
-      <span><i class="puce dispo"></i> a ouvrir</span>
-      <span><i class="puce verrou"></i> a venir</span>
+      <span><i class="puce aujourdhui"></i> aujourd’hui</span>
+      <span><i class="puce ouvert"></i> déjà ouvert</span>
+      <span><i class="puce dispo"></i> à ouvrir</span>
+      <span><i class="puce verrou"></i> à venir</span>
       <span><i class="puce retrouvailles"></i> retrouvailles</span>
     </div>
   </section>
@@ -576,7 +576,7 @@
   var affiche = Math.min(Math.max(courant, PREMIER), TOTAL);
   var essais = 0;
 
-  var THEMES = { meme: "Blague", maths: "Calcul", logique: "Logique", enigme: "Enigme", culture: "Culture", nous: "Nous deux" };
+  var THEMES = { meme: "Blague", maths: "Calcul", logique: "Logique", enigme: "Énigme", culture: "Culture", nous: "Nous deux" };
 
   function jourParNumero(n) {
     for (var i = 0; i < DATA.jours.length; i++) if (DATA.jours[i].jour === n) return DATA.jours[i];
@@ -592,8 +592,8 @@
 
   /* ---------- Rendu du calendrier ---------- */
 
-  var MOIS_NOMS = ["janvier", "fevrier", "mars", "avril", "mai", "juin",
-                   "juillet", "aout", "septembre", "octobre", "novembre", "decembre"];
+  var MOIS_NOMS = ["janvier", "février", "mars", "avril", "mai", "juin",
+                   "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
   var JOURS_COURTS = ["L", "M", "M", "J", "V", "S", "D"];
 
   function dateDe(n) { return ajouterJours(DATA.debut, n - 1); }
@@ -628,7 +628,7 @@
       if (etat === "verrou") cell.disabled = true;
       var suffixe = n === TOTAL ? ", les retrouvailles"
         : etat === "verrou" ? ", pas encore disponible"
-        : etat === "ouvert" ? ", deja ouvert" : ", a ouvrir";
+        : etat === "ouvert" ? ", déjà ouvert" : ", à ouvrir";
       cell.setAttribute("aria-label", "Jour " + n + ", " + d + " " + MOIS_NOMS[mois] + suffixe);
       g.appendChild(cell);
     }
@@ -664,7 +664,7 @@
 
     if (courant < PREMIER) {
       var att = elem("div", "carte");
-      att.appendChild(elem("p", "vide", "Le premier mot s ouvre le " + dateDuJour(PREMIER) + ". Reviens ce jour-la."));
+      att.appendChild(elem("p", "vide", "Le premier mot s’ouvre le " + dateDuJour(PREMIER) + ". Reviens ce jour-là."));
       zone.appendChild(att);
       return;
     }
@@ -717,8 +717,8 @@
       var input = document.createElement("input");
       input.type = "text";
       input.autocomplete = "off";
-      input.placeholder = "Ta reponse";
-      input.setAttribute("aria-label", "Ta reponse");
+      input.placeholder = "Ta réponse";
+      input.setAttribute("aria-label", "Ta réponse");
       var btn = elem("button", "btn", "Ouvrir");
       btn.type = "submit";
       form.appendChild(input);
@@ -761,7 +761,7 @@
           essais++;
           var vieille = msg.querySelector(".erreur");
           if (vieille) vieille.remove();
-          var textes = ["Pas tout a fait. Reessaie.", "Toujours pas. Tu veux un indice ?", "Non plus. L indice est juste en dessous."];
+          var textes = ["Pas tout à fait. Réessaie.", "Toujours pas. Tu veux un indice ?", "Non plus. L’indice est juste en dessous."];
           msg.insertBefore(elem("p", "erreur", textes[Math.min(essais - 1, 2)]), msg.firstChild);
           input.classList.remove("secousse");
           void input.offsetWidth;
@@ -777,7 +777,7 @@
     }
 
     if (affiche !== courant && courant >= PREMIER && courant <= TOTAL) {
-      var retour = elem("button", "retour", "Revenir au jour d aujourd hui");
+      var retour = elem("button", "retour", "Revenir au jour d’aujourd’hui");
       retour.type = "button";
       retour.addEventListener("click", function () {
         affiche = Math.min(courant, TOTAL);
@@ -800,9 +800,9 @@
     var el = document.getElementById("compteur");
     el.textContent = "";
     if (courant < PREMIER) {
-      el.appendChild(document.createTextNode("Le compte a rebours n a pas encore commence"));
+      el.appendChild(document.createTextNode("Le compte à rebours n’a pas encore commencé"));
     } else if (courant > TOTAL) {
-      el.appendChild(document.createTextNode("C est fini. "));
+      el.appendChild(document.createTextNode("C’est fini. "));
       var b0 = document.createElement("b");
       b0.textContent = ouverts + " mots";
       el.appendChild(b0);
@@ -817,7 +817,7 @@
       el.appendChild(b2);
       el.appendChild(document.createTextNode(" restants · " + ouverts + " ouverts"));
     }
-    document.getElementById("pied").textContent = "Une case de plus chaque jour, jusqu au " + courtDate(dateDe(TOTAL)) + ".";
+    document.getElementById("pied").textContent = "Une case de plus chaque jour, jusqu’au " + courtDate(dateDe(TOTAL)) + ".";
   }
 
   /* ---------- Demarrage ---------- */
@@ -827,12 +827,12 @@
     document.getElementById("surtitre").textContent =
       courtDate(d1) + " — " + courtDate(dF) + " · " + TOTAL + " jours";
     var h1 = document.getElementById("titre-page");
-    h1.textContent = "Jusqu au " + courtDate(dF) + ",";
+    h1.textContent = "Jusqu’au " + courtDate(dF) + ",";
     h1.appendChild(document.createElement("br"));
     var em = document.createElement("em");
     em.textContent = DATA.prenom;
     h1.appendChild(em);
-    document.title = "Jusqu au " + courtDate(dF);
+    document.title = "Jusqu’au " + courtDate(dF);
   })();
 
   document.getElementById("calendrier").addEventListener("click", function (ev) {
